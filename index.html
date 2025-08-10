@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishan Sehgal - Robotics Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">IS</span>
+                <div class="logo-grid"></div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="typing-text">Ishan Sehgal</span>
+                        <span class="cursor">|</span>
+                    </h1>
+                    <h2 class="hero-subtitle">Robotics Engineer & Autonomous Systems Developer</h2>
+                    <p class="hero-description">
+                        Transforming ideas into intelligent autonomous systems through cutting-edge robotics and AI
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary">View Projects</a>
+                        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <!-- Add your profile image here -->
+                    <div class="profile-image-container">
+                        <img src="images/profile.jpg" alt="Ishan Sehgal" class="profile-image">
+                        <div class="image-border"></div>
+                    </div>
+                    <!-- A* Algorithm Visualization -->
+                    <div class="algorithm-viz">
+                        <div class="grid-container" id="astar-grid"></div>
+                        <div class="algo-label">A* Pathfinding</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a final-year Electronics and Communication student at Guru Nanak Dev University, Amritsar, 
+                        with a passion for designing autonomous systems. My expertise lies in creating reliable, 
+                        real-world robotics solutions through simulation, control, and implementation.
+                    </p>
+                    <p>
+                        Currently interning at Rigbetel Labs LLP, I've successfully converted AGVs to fully autonomous 
+                        AMRs and executed multiple robotics projects involving autonomous navigation systems.
+                    </p>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-number">15+</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">AIR-13</span>
+                            <span class="stat-label">E-YRC Rank</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <!-- Robot arm visualization -->
+                    <div class="robot-arm">
+                        <div class="arm-base"></div>
+                        <div class="arm-segment-1"></div>
+                        <div class="arm-segment-2"></div>
+                        <div class="end-effector"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan 2025 - June 2025</div>
+                    <div class="timeline-content">
+                        <h3>Onsite Internship - Rigbetel Labs LLP</h3>
+                        <p>Conducted hands-on projects with real robots, successfully converting two AGVs to fully autonomous AMRs. Executed multiple robotics projects involving real-world applications and autonomous navigation systems.</p>
+                        <div class="tags">
+                            <span class="tag">AGV to AMR Conversion</span>
+                            <span class="tag">Autonomous Navigation</span>
+                            <span class="tag">Real-world Implementation</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">May 2024 - July 2024</div>
+                    <div class="timeline-content">
+                        <h3>EYSIP 2024 Summer Internship - e-Yantra</h3>
+                        <p>Developed behavior trees for autonomous eBot and UR5 arm, improving reliability by reducing manual resets and downtime. Designed fail-safe mechanisms and implemented auto-localization.</p>
+                        <div class="tags">
+                            <span class="tag">Behavior Trees</span>
+                            <span class="tag">UR5 Arm</span>
+                            <span class="tag">Auto-localization</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Sept 2023 - Jan 2024</div>
+                    <div class="timeline-content">
+                        <h3>E-YRC 2023 - IIT Bombay</h3>
+                        <p>Advanced to Stage 2, securing AIR-13 in the Cosmo Logistics theme. Developed an autonomous sorting and packaging system using a robotic arm and mobile robot.</p>
+                        <div class="tags">
+                            <span class="tag">AIR-13</span>
+                            <span class="tag">Autonomous Sorting</span>
+                            <span class="tag">Algorithm Optimization</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <!-- Add project image here -->
+                        <img src="images/ebot-project.jpg" alt="Autonomous eBot Project">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Ishansehgal/Autonomous-E-bot" class="project-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Autonomous eBot Project</h3>
+                        <p>Developed an autonomous eBot using ROS 2 Foxy, integrating Ylidar, motor encoders, and SLAM for navigation with consistent localization accuracy.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">ROS 2</span>
+                            <span class="tech-tag">SLAM</span>
+                            <span class="tech-tag">YLidar</span>
+                            <span class="tech-tag">C++</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <!-- Add project image here -->
+                        <img src="images/robocar-project.jpg" alt="Autonomous Robocar Project">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Ishansehgal/Obstacel-avoiding-bluetooth-arduino-based-car" class="project-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Autonomous Robocar Project</h3>
+                        <p>Integrated Arduino UNO, ultrasonic sensors, and Raspberry Pi Zero for obstacle avoidance with remote control capabilities.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Arduino</span>
+                            <span class="tech-tag">Raspberry Pi</span>
+                            <span class="tech-tag">Bluetooth</span>
+                            <span class="tech-tag">C++</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <!-- Add project image here -->
+                        <img src="images/nav-stack.jpg" alt="ROS Navigation Stack">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Ishansehgal/ROS-Navigation-Stack" class="project-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>ROS Navigation Stack</h3>
+                        <p>Implementation of advanced navigation algorithms for autonomous mobile robots with path planning and obstacle avoidance.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">ROS</span>
+                            <span class="tech-tag">Navigation</span>
+                            <span class="tech-tag">Path Planning</span>
+                            <span class="tech-tag">CMake</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Arsenal</h2>
+            <div class="skills-content">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">C++</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Robotics Frameworks</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">ROS/ROS 2</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Open-RMF</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MoveIt2</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Hardware & Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Raspberry Pi</span>
+                        <span class="skill-tag">YD LiDAR</span>
+                        <span class="skill-tag">ESP32</span>
+                        <span class="skill-tag">Depth Cameras</span>
+                        <span class="skill-tag">GPS</span>
+                        <span class="skill-tag">3D-Lidars</span>
+                        <span class="skill-tag">Robotics Manipulators</span>
+                        <span class="skill-tag">Motor Encoders</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Software Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Fusion 360</span>
+                        <span class="skill-tag">Gazebo</span>
+                        <span class="skill-tag">SLAM</span>
+                        <span class="skill-tag">Nav/Nav2</span>
+                        <span class="skill-tag">Behavior Trees</span>
+                        <span class="skill-tag">Linux</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>sehgalishan26@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+91 7347327727</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <div>
+                            <h4>LinkedIn</h4>
+                            <a href="https://www.linkedin.com/in/sehgalishan/" target="_blank">Connect with me</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <h4>GitHub</h4>
+                            <a href="https://github.com/Ishansehgal" target="_blank">View my code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-visual">
+                    <!-- Dijkstra's algorithm visualization -->
+                    <div class="graph-container">
+                        <svg class="graph-svg" viewBox="0 0 300 200">
+                            <!-- Nodes -->
+                            <circle class="node" cx="50" cy="50" r="15" data-node="A"/>
+                            <circle class="node" cx="150" cy="30" r="15" data-node="B"/>
+                            <circle class="node" cx="250" cy="50" r="15" data-node="C"/>
+                            <circle class="node" cx="100" cy="100" r="15" data-node="D"/>
+                            <circle class="node" cx="200" cy="120" r="15" data-node="E"/>
+                            <circle class="node" cx="150" cy="170" r="15" data-node="F"/>
+                            
+                            <!-- Edges -->
+                            <line class="edge" x1="50" y1="50" x2="150" y2="30"/>
+                            <line class="edge" x1="150" y1="30" x2="250" y2="50"/>
+                            <line class="edge" x1="50" y1="50" x2="100" y2="100"/>
+                            <line class="edge" x1="150" y1="30" x2="100" y2="100"/>
+                            <line class="edge" x1="100" y1="100" x2="200" y2="120"/>
+                            <line class="edge" x1="200" y1="120" x2="250" y2="50"/>
+                            <line class="edge" x1="100" y1="100" x2="150" y2="170"/>
+                            <line class="edge" x1="200" y1="120" x2="150" y2="170"/>
+                            
+                            <!-- Node labels -->
+                            <text x="50" y="55" class="node-label">A</text>
+                            <text x="150" y="35" class="node-label">B</text>
+                            <text x="250" y="55" class="node-label">C</text>
+                            <text x="100" y="105" class="node-label">D</text>
+                            <text x="200" y="125" class="node-label">E</text>
+                            <text x="150" y="175" class="node-label">F</text>
+                        </svg>
+                        <div class="algo-label">Dijkstra's Shortest Path</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Ishan Sehgal. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="https://github.com/Ishansehgal" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/sehgalishan/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:sehgalishan26@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
