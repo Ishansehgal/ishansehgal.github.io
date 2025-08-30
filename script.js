@@ -1,193 +1,122 @@
-// Navigation
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
-
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
+// Initialize AOS
+AOS.init({
+    duration: 1000,
+    once: true,
+    offset: 100
 });
 
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
-});
-
-// Smooth scrolling and active nav links
-window.addEventListener('scroll', () => {
-    let current = '';
-    const sections = document.querySelectorAll('section');
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (scrollY >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
-    });
-});
-
-// Typing animation
-const typingText = document.querySelector('.typing-text');
-const text = 'Ishan Sehgal';
-let index = 0;
-
-function type() {
-    if (index < text.length) {
-        typingText.textContent += text.charAt(index);
-        index++;
-        setTimeout(type, 150);
+// Project details data
+const projectDetails = {
+    'eyantra': {
+        title: 'E-Yantra AMR with UR5 Arm',
+        description: 'Developed an autonomous mobile robot integrated with UR5 robotic arm for warehouse automation. The system navigated through facilities, identified racks, and placed boxes with precision.',
+        technologies: ['ROS Noetic', 'Python', 'Gazebo', 'UR5', 'AMR Navigation'],
+        challenges: 'Learning the gap between simulation and real-world robotics, dealing with sensor noise, and achieving precise manipulation.',
+        outcome: 'Achieved AIR 13 rank nationally and gained hands-on experience with real robots at IIT Bombay.',
+        github: 'https://github.com/your-username/eyantra-project',
+        images: ['project1-1.jpg', 'project1-2.jpg']
+    },
+    'custom-robot': {
+        title: 'Custom Differential Drive Robot',
+        description: 'Built a custom autonomous robot from scratch using 4-wheel differential drive design. Implemented SLAM, localization, and autonomous navigation in real-world environments.',
+        technologies: ['ROS2 Humble', '2D LiDAR', 'Wheel Encoders', 'SLAM', 'Python'],
+        challenges: 'Mechanical design challenges, sensor calibration, debugging odometry, and mapping accuracy.',
+        outcome: 'Successfully created detailed maps of university department and achieved reliable autonomous navigation.',
+        github: 'https://github.com/your-username/custom-robot',
+        images: ['project2-1.jpg', 'project2-2.jpg']
+    },
+    'docking': {
+        title: 'Autonomous Docking System',
+        description: 'Implemented autonomous docking system using ArUco markers and behavior trees. Reduced operator dependency for robot operations.',
+        technologies: ['PyTrees', 'ArUco Markers', 'OpenCV', 'ROS2', 'Computer Vision'],
+        challenges: 'Precise marker detection, behavior tree design, and handling edge cases in docking maneuvers.',
+        outcome: 'Successfully automated docking process, reducing setup time and increasing operational efficiency.',
+        github: 'https://github.com/your-username/autonomous-docking',
+        images: ['project3-1.jpg', 'project3-2.jpg']
+    },
+    'nav2-plugins': {
+        title: 'Custom Nav2 Plugins',
+        description: 'Developed custom plugins for ROS2 Nav2 stack to handle specialized robot behaviors and navigation requirements for different robot types.',
+        technologies: ['ROS2 Nav2', 'C++', 'Behavior Trees', 'Path Planning'],
+        challenges: 'Understanding Nav2 architecture, plugin development, and testing with various robot configurations.',
+        outcome: 'Created reusable navigation components used across multiple robot platforms in production.',
+        github: 'https://github.com/your-username/nav2-plugins',
+        images: ['project4-1.jpg', 'project4-2.jpg']
     }
-}
-
-// Start typing animation when page loads
-window.addEventListener('load', () => {
-    typingText.textContent = '';
-    setTimeout(type, 1000);
-});
-
-// Skill bars animation
-const skillBars = document.querySelectorAll('.skill-progress');
-const skillSection = document.querySelector('.skills');
-
-const animateSkills = () => {
-    skillBars.forEach(bar => {
-        const width = bar.getAttribute('data-width');
-        bar.style.width = width + '%';
-    });
 };
 
-// Intersection Observer for skills animation
-const skillsObserver = new IntersectionObserver((entries) => {
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Project modal functionality
+const modal = document.getElementById('project-modal');
+const modalBody = document.getElementById('modal-body');
+const closeBtn = document.querySelector('.close');
+
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const projectId = this.getAttribute('data-project');
+        const project = projectDetails[projectId];
+        
+        if (project) {
+            modalBody.innerHTML = `
+                <h2>${project.title}</h2>
+                <p><strong>Description:</strong> ${project.description}</p>
+                <p><strong>Technologies:</strong> ${project.technologies.join(', ')}</p>
+                <p><strong>Challenges:</strong> ${project.challenges}</p>
+                <p><strong>Outcome:</strong> ${project.outcome}</p>
+                <div class="modal-buttons">
+                    <a href="${project.github}" class="btn primary" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                </div>
+            `;
+            modal.style.display = 'block';
+        }
+    });
+});
+
+closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', function(e) {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Navbar background on scroll
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+    } else {
+        navbar.style.background = 'rgba(10, 10, 10, 0.7)';
+    }
+});
+
+// Robot animation restart on scroll
+let robotAnimationObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            animateSkills();
+            const robot = entry.target.querySelector('.robot');
+            robot.style.animation = 'none';
+            robot.offsetHeight; // Trigger reflow
+            robot.style.animation = 'moveRobot 8s infinite linear';
         }
     });
-}, { threshold: 0.5 });
-
-if (skillSection) {
-    skillsObserver.observe(skillSection);
-}
-
-// A* Grid Animation
-const createAStarGrid = () => {
-    const grid = document.getElementById('astar-grid');
-    if (!grid) return;
-    
-    for (let i = 0; i < 80; i++) {
-        const cell = document.createElement('div');
-        cell.style.width = '20px';
-        cell.style.height = '20px';
-        cell.style.background = Math.random() > 0.8 ? '#333' : 'transparent';
-        cell.style.border = '1px solid rgba(0, 255, 136, 0.2)';
-        
-        // Animate some cells
-        if (Math.random() > 0.9) {
-            cell.style.background = 'var(--primary-color)';
-            cell.style.animation = 'pulse 2s infinite';
-        }
-        
-        grid.appendChild(cell);
-    }
-};
-
-// Graph algorithm visualization
-const animateGraph = () => {
-    const nodes = document.querySelectorAll('.node');
-    const edges = document.querySelectorAll('.edge');
-    
-    // Dijkstra's algorithm simulation
-    let currentIndex = 0;
-    const visitOrder = [0, 1, 3, 4, 2, 5];
-    
-    const visitNode = () => {
-        if (currentIndex < visitOrder.length) {
-            const node = nodes[visitOrder[currentIndex]];
-            node.style.fill = 'var(--secondary-color)';
-            node.style.r = '18';
-            
-            // Reset previous nodes
-            nodes.forEach((n, idx) => {
-                if (idx !== visitOrder[currentIndex]) {
-                    n.style.fill = 'var(--primary-color)';
-                    n.style.r = '15';
-                }
-            });
-            
-            currentIndex++;
-            setTimeout(visitNode, 1000);
-        } else {
-            // Reset and restart
-            setTimeout(() => {
-                currentIndex = 0;
-                visitNode();
-            }, 2000);
-        }
-    };
-    
-    visitNode();
-};
-
-// Initialize animations
-window.addEventListener('load', () => {
-    createAStarGrid();
-    setTimeout(animateGraph, 2000);
 });
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('.hero-visual');
-    
-    parallaxElements.forEach(element => {
-        const speed = 0.5;
-        element.style.transform = `translateY(${scrolled * speed}px)`;
-    });
-});
-
-// Add CSS for pulse animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.7; transform: scale(1.1); }
-    }
-`;
-document.head.appendChild(style);
-
-// Contact form animation (if you add a contact form later)
-const contactItems = document.querySelectorAll('.contact-item');
-contactItems.forEach((item, index) => {
-    item.style.animationDelay = `${index * 0.2}s`;
-    item.classList.add('fade-in-up');
-});
-
-// Add fade-in-up animation
-const fadeInStyle = document.createElement('style');
-fadeInStyle.textContent = `
-    @keyframes fade-in-up {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .fade-in-up {
-        animation: fade-in-up 0.8s ease forwards;
-    }
-`;
-document.head.appendChild(fadeInStyle);
+robotAnimationObserver.observe(document.querySelector('.robot-animation'));
