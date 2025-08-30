@@ -1,151 +1,323 @@
-import * as THREE from 'three';
-
-// --- SCENE SETUP ---
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-// --- LIGHTING ---
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-scene.add(ambientLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
-directionalLight.position.set(10, 15, 10);
-scene.add(directionalLight);
-
-// --- WORLD ---
-const floorGeometry = new THREE.PlaneGeometry(60, 60);
-const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a2a, metalness: 0.1, roughness: 0.9 });
-const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.rotation.x = -Math.PI / 2;
-scene.add(floor);
-
-// --- NEW MODERN ROBOT MODEL ---
-const robot = new THREE.Group();
-
-// Materials
-const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xe0e0e0, metalness: 0.8, roughness: 0.4 });
-const accentMaterial = new THREE.MeshStandardMaterial({ color: 0x00aaff, metalness: 0.6, roughness: 0.5 });
-const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.8 });
-
-// Body
-const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.4, 0.3, 32);
-const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-body.position.y = 0.35;
-robot.add(body);
-
-// Head / Sensor Mast
-const headGeometry = new THREE.CylinderGeometry(0.2, 0.25, 0.4, 32);
-const head = new THREE.Mesh(headGeometry, accentMaterial);
-head.position.y = 0.7;
-robot.add(head);
-
-// Antenna
-const antennaGeometry = new THREE.SphereGeometry(0.05, 16, 16);
-const antenna = new THREE.Mesh(antennaGeometry, bodyMaterial);
-antenna.position.y = 0.95;
-robot.add(antenna);
-
-// Wheels
-const wheelGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.1, 24);
-const wheelPositions = [
-    { x: 0.4, y: 0.2, z: 0.3 }, { x: -0.4, y: 0.2, z: 0.3 },
-    { x: 0.4, y: 0.2, z: -0.3 }, { x: -0.4, y: 0.2, z: -0.3 }
-];
-wheelPositions.forEach(pos => {
-    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-    wheel.rotation.z = Math.PI / 2;
-    wheel.position.set(pos.x, pos.y, pos.z);
-    robot.add(wheel);
-});
-scene.add(robot);
-
-
-// --- PROJECT ZONES (Updated to match your journey) ---
-const zones = [
-    { pos: new THREE.Vector3(0, 0.01, -8), color: 0x00ff00, id: 'genesis-info', size: new THREE.Vector3(6, 0.02, 6) },
-    { pos: new THREE.Vector3(-12, 0.01, 0), color: 0xff0000, id: 'eyantra-info', size: new THREE.Vector3(6, 0.02, 6) },
-    { pos: new THREE.Vector3(0, 0.01, 12), color: 0xffff00, id: 'myamr-info', size: new THREE.Vector3(6, 0.02, 6) },
-    { pos: new THREE.Vector3(12, 0.01, 0), color: 0x0000ff, id: 'intern-info', size: new THREE.Vector3(6, 0.02, 6) },
-    { pos: new THREE.Vector3(0, 0.01, -20), color: 0xff00ff, id: 'pro-info', size: new THREE.Vector3(6, 0.02, 6) },
-];
-
-zones.forEach(zoneData => {
-    const zoneGeo = new THREE.BoxGeometry(zoneData.size.x, zoneData.size.y, zoneData.size.z);
-    const zoneMat = new THREE.MeshBasicMaterial({ color: zoneData.color, transparent: true, opacity: 0.5 });
-    const zoneMesh = new THREE.Mesh(zoneGeo, zoneMat);
-    zoneMesh.position.copy(zoneData.pos);
-    scene.add(zoneMesh);
-    zoneData.mesh = zoneMesh;
-});
-
-// --- CONTROLS ---
-const keys = {};
-document.addEventListener('keydown', (e) => keys[e.key] = true);
-document.addEventListener('keyup', (e) => keys[e.key] = false);
-
-const moveSpeed = 0.1;
-const turnSpeed = 0.03;
-
-// --- ODOMETRY ---
-let odometryPoints = [new THREE.Vector3(robot.position.x, 0.02, robot.position.z)];
-const odometryMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 });
-let odometryLine;
-
-function updateOdometry() {
-    const lastPoint = odometryPoints[odometryPoints.length - 1];
-    const currentPoint = new THREE.Vector3(robot.position.x, 0.02, robot.position.z);
-    if (currentPoint.distanceTo(lastPoint) > 0.5) {
-        odometryPoints.push(currentPoint);
-        if (odometryLine) scene.remove(odometryLine);
-        const odometryGeometry = new THREE.BufferGeometry().setFromPoints(odometryPoints);
-        odometryLine = new THREE.Line(odometryGeometry, odometryMaterial);
-        scene.add(odometryLine);
+class RoboticsPortfolio {
+    constructor() {
+        this.isLoading = true;
+        this.currentMode = 'autonomous';
+        this.roboticsWorld = null;
+        this.behaviorTree = null;
+        this.localizationMap = null;
+        
+        this.init();
     }
-}
 
-// --- ANIMATION LOOP ---
-function animate() {
-    requestAnimationFrame(animate);
+    async init() {
+        await this.showLoadingScreen();
+        this.setupEventListeners();
+        this.initializeComponents();
+        this.hideLoadingScreen();
+    }
 
-    // Robot Movement Logic
-    if (keys['ArrowUp']) robot.translateZ(moveSpeed);
-    if (keys['ArrowDown']) robot.translateZ(-moveSpeed);
-    if (keys['ArrowLeft']) robot.rotateY(turnSpeed);
-    if (keys['ArrowRight']) robot.rotateY(-turnSpeed);
+    showLoadingScreen() {
+        return new Promise(resolve => {
+            const progress = document.querySelector('.loading-progress');
+            let width = 0;
+            
+            const interval = setInterval(() => {
+                width += Math.random() * 10;
+                if (width >= 100) {
+                    width = 100;
+                    progress.style.width = width + '%';
+                    clearInterval(interval);
+                    setTimeout(resolve, 500);
+                } else {
+                    progress.style.width = width + '%';
+                }
+            }, 100);
+        });
+    }
 
-    // Camera Logic
-    const relativeCameraOffset = new THREE.Vector3(0, 6, -10);
-    const cameraOffset = relativeCameraOffset.applyMatrix4(robot.matrixWorld);
-    camera.position.lerp(cameraOffset, 0.1);
-    camera.lookAt(robot.position);
+    hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            this.isLoading = false;
+        }, 500);
+    }
 
-    updateOdometry();
+    setupEventListeners() {
+        // Navigation controls
+        document.getElementById('auto-mode').addEventListener('click', () => {
+            this.setMode('autonomous');
+        });
 
-    // Zone Collision and Info Display
-    let inAnyZone = false;
-    document.querySelectorAll('.info-box').forEach(box => box.style.display = 'none');
-    
-    zones.forEach(zone => {
-        const box = new THREE.Box3().setFromObject(zone.mesh);
-        if (box.containsPoint(robot.position)) {
-            document.getElementById(zone.id).style.display = 'block';
-            inAnyZone = true;
+        document.getElementById('manual-mode').addEventListener('click', () => {
+            this.setMode('manual');
+        });
+
+        document.getElementById('reset-position').addEventListener('click', () => {
+            this.resetRobotPosition();
+        });
+
+        // Control panel
+        this.setupControlPanel();
+
+        // Modal
+        this.setupModal();
+
+        // Keyboard controls
+        this.setupKeyboardControls();
+    }
+
+    setupControlPanel() {
+        const linearKp = document.getElementById('linear-kp');
+        const angularKp = document.getElementById('angular-kp');
+        const controllerType = document.getElementById('controller-type');
+
+        linearKp.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            e.target.nextElementSibling.textContent = value.toFixed(1);
+            if (this.roboticsWorld) {
+                this.roboticsWorld.updateLinearKp(value);
+            }
+        });
+
+        angularKp.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            e.target.nextElementSibling.textContent = value.toFixed(1);
+            if (this.roboticsWorld) {
+                this.roboticsWorld.updateAngularKp(value);
+            }
+        });
+
+        controllerType.addEventListener('change', (e) => {
+            this.updateControllerDescription(e.target.value);
+            if (this.roboticsWorld) {
+                this.roboticsWorld.setControllerType(e.target.value);
+            }
+        });
+    }
+
+    updateControllerDescription(type) {
+        const descriptions = {
+            'dwa': 'Dynamic Window Approach - Local trajectory optimization considering robot dynamics',
+            'pure-pursuit': 'Pure Pursuit - Geometric path following with lookahead distance',
+            'graceful': 'Graceful Controller - Smooth motion with velocity ramping'
+        };
+        
+        document.getElementById('controller-description').textContent = descriptions[type];
+    }
+
+    setupModal() {
+        const modal = document.getElementById('project-modal');
+        const closeBtn = document.querySelector('.close');
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    setupKeyboardControls() {
+        document.addEventListener('keydown', (e) => {
+            if (this.currentMode === 'manual' && this.roboticsWorld) {
+                this.roboticsWorld.handleKeyPress(e.key.toLowerCase());
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (this.currentMode === 'manual' && this.roboticsWorld) {
+                this.roboticsWorld.handleKeyRelease(e.key.toLowerCase());
+            }
+        });
+    }
+
+    initializeComponents() {
+        // Initialize 3D World
+        this.roboticsWorld = new RoboticsWorld('robotics-world');
+        
+        // Initialize Behavior Tree
+        this.behaviorTree = new BehaviorTreeVisualizer('behavior-tree-container');
+        
+        // Initialize Localization Map
+        this.initLocalizationMap();
+        
+        // Start update loop
+        this.startUpdateLoop();
+    }
+
+    initLocalizationMap() {
+        const canvas = document.getElementById('localization-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        this.localizationMap = {
+            canvas: canvas,
+            ctx: ctx,
+            odometryPath: [],
+            robotPosition: { x: 100, y: 100 },
+            landmarks: [
+                { x: 50, y: 50, name: "Projects" },
+                { x: 150, y: 50, name: "Experience" },
+                { x: 50, y: 150, name: "Skills" },
+                { x: 150, y: 150, name: "Contact" }
+            ]
+        };
+        
+        this.drawLocalizationMap();
+    }
+
+    drawLocalizationMap() {
+        const { ctx, canvas, odometryPath, robotPosition, landmarks } = this.localizationMap;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 20) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
         }
-    });
-
-    if (!inAnyZone) {
-        document.getElementById('welcome-info').style.display = 'block';
+        for (let i = 0; i < canvas.height; i += 20) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvas.width, i);
+            ctx.stroke();
+        }
+        
+        // Draw odometry path
+        if (odometryPath.length > 1) {
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(odometryPath[0].x, odometryPath[0].y);
+            for (let i = 1; i < odometryPath.length; i++) {
+                ctx.lineTo(odometryPath[i].x, odometryPath[i].y);
+            }
+            ctx.stroke();
+        }
+        
+        // Draw landmarks
+        landmarks.forEach(landmark => {
+            ctx.fillStyle = '#ffe66d';
+            ctx.beginPath();
+            ctx.arc(landmark.x, landmark.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = '8px Arial';
+            ctx.fillText(landmark.name, landmark.x - 15, landmark.y - 10);
+        });
+        
+        // Draw robot position
+        ctx.fillStyle = '#4ecdc4';
+        ctx.beginPath();
+        ctx.arc(robotPosition.x, robotPosition.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw robot direction indicator
+        ctx.strokeStyle = '#4ecdc4';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(robotPosition.x, robotPosition.y);
+        ctx.lineTo(robotPosition.x + 15, robotPosition.y);
+        ctx.stroke();
     }
 
-    renderer.render(scene, camera);
+    setMode(mode) {
+        this.currentMode = mode;
+        
+        // Update UI
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(mode + '-mode').classList.add('active');
+        
+        // Show/hide manual controls
+        const manualControls = document.getElementById('manual-controls');
+        if (mode === 'manual') {
+            manualControls.classList.remove('hidden');
+        } else {
+            manualControls.classList.add('hidden');
+        }
+        
+        // Update robotics world
+        if (this.roboticsWorld) {
+            this.roboticsWorld.setMode(mode);
+        }
+    }
+
+    resetRobotPosition() {
+        if (this.roboticsWorld) {
+            this.roboticsWorld.resetPosition();
+        }
+        
+        // Reset localization map
+        this.localizationMap.odometryPath = [];
+        this.localizationMap.robotPosition = { x: 100, y: 100 };
+        this.drawLocalizationMap();
+    }
+
+    showProjectModal(projectData) {
+        const modal = document.getElementById('project-modal');
+        const detailsContainer = document.getElementById('project-details');
+        
+        detailsContainer.innerHTML = ProjectTemplates.renderProject(projectData);
+        modal.style.display = 'block';
+    }
+
+    updateRobotStatus(position, velocity, goal) {
+        document.getElementById('robot-position').textContent = 
+            `X: ${position.x.toFixed(1)}, Y: ${position.y.toFixed(1)}`;
+        document.getElementById('robot-velocity').textContent = 
+            `Linear: ${velocity.linear.toFixed(2)}, Angular: ${velocity.angular.toFixed(2)}`;
+        document.getElementById('current-goal').textContent = goal || 'None';
+        
+        // Update localization map
+        this.updateLocalizationMap(position);
+    }
+
+    updateLocalizationMap(position) {
+        const mapPos = {
+            x: (position.x + 10) * 10,  // Scale and offset for map
+            y: (position.z + 10) * 10
+        };
+        
+        // Add to odometry path
+        this.localizationMap.odometryPath.push({...mapPos});
+        if (this.localizationMap.odometryPath.length > 50) {
+            this.localizationMap.odometryPath.shift();
+        }
+        
+        // Update robot position
+        this.localizationMap.robotPosition = mapPos;
+        
+        this.drawLocalizationMap();
+    }
+
+    startUpdateLoop() {
+        const update = () => {
+            if (!this.isLoading) {
+                if (this.roboticsWorld) {
+                    this.roboticsWorld.update();
+                }
+                
+                if (this.behaviorTree) {
+                    this.behaviorTree.update();
+                }
+            }
+            requestAnimationFrame(update);
+        };
+        update();
+    }
 }
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.portfolio = new RoboticsPortfolio();
 });
-
-animate();

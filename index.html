@@ -3,55 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ishan Sehgal | Robotics Developer</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Ishan Sehgal - Robotics Developer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.7/build/dat.gui.min.js"></script>
 </head>
 <body>
-    <div id="canvas-container"></div>
-
-    <div id="controls">
-        <h3>🤖 Robot Controls</h3>
-        <p>Use Arrow Keys to Drive</p>
-        <div id="instructions">
-            <span>↑</span> Fwd | <span>↓</span> Bwd | <span>←</span> Left | <span>→</span> Right
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="robot-loader">🤖</div>
+            <p>Initializing Navigation Stack...</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
         </div>
     </div>
 
-    <div id="info-overlay">
-        <div id="welcome-info" class="info-box">
-            <h2>Welcome to My Robotics Journey</h2>
-            <p>I'm Ishan Sehgal. This interactive space showcases my evolution as a robotics developer. Drive the robot over the colored zones to explore key moments in my story. The yellow line traces the robot's <strong>odometry</strong>—its traveled path.</p>
+    <!-- Main Navigation -->
+    <nav id="main-nav">
+        <div class="nav-brand">
+            <span class="nav-logo">🤖</span>
+            <span>Ishan Sehgal</span>
         </div>
-        
-        <div id="genesis-info" class="info-box" style="display: none;">
-            <h3>The Genesis: First Steps in ROS (B.Tech)</h3>
-            <p>My journey began with a simple Arduino obstacle-avoidance car. I quickly realized I needed more powerful tools for true autonomy. A mentorship with <strong>RigBetel Labs</strong> introduced me to ROS Noetic, where I modeled a diff-drive robot in URDF and deployed the Nav Stack. This first taste of localization and odometry got me hooked.</p>
+        <div class="nav-controls">
+            <button id="auto-mode" class="nav-btn active">Autonomous Mode</button>
+            <button id="manual-mode" class="nav-btn">Manual Control</button>
+            <button id="reset-position" class="nav-btn">Reset Position</button>
         </div>
+    </nav>
 
-        <div id="eyantra-info" class="info-box" style="display: none;">
-            <h3>The Challenge: e-Yantra Competition (AIR 13)</h3>
-            <p>I led a team in the e-Yantra competition, automating an AMR and a UR5 arm. We moved from simulation to controlling the real robot at IIT Bombay. Securing an All India Rank of 13 was a great achievement, but the real lesson was understanding the vast <strong>sim-to-real gap</strong>. It solidified my desire to master real-world hardware.</p>
-        </div>
-
-        <div id="myamr-info" class="info-box" style="display: none;">
-            <h3>The Build: My Personal ROS2 AMR</h3>
-            <p>Motivated to bridge the sim-to-real gap, I built my own AMR. Using a laptop motherboard, 2D LiDAR, and wheel encoders, I created a 4-wheel robot running ROS2 Foxy. After months of debugging and calibration, I successfully mapped my university department—a huge step in mastering hardware integration from the ground up.</p>
-        </div>
-        
-        <div id="intern-info" class="info-box" style="display: none;">
-            <h3>The Experience: Internships at IIT Bombay & RigBetel Labs</h3>
-            <p>As an intern at IIT Bombay, I worked on the same e-Yantra robot, implementing autonomous docking with ArUco markers and diving into <strong>Behavior Trees</strong> with `py_trees`. Later, at RigBetel Labs, I specialized in the ROS2 Nav2 stack, developing custom BT plugins and gaining hands-on experience with professional AGVs.</p>
-        </div>
-
-        <div id="pro-info" class="info-box" style="display: none;">
-            <h3>The Professional: Associate Robotics Developer</h3>
-            <p>My successful internship at RigBetel Labs led to a full-time role as an Associate Robotics Developer. Today, I work on a variety of real-world mobile robots and robotic arms, heavily focusing on Nav2 and Behavior Trees to create robust, intelligent, and autonomous systems.</p>
+    <!-- Localization & Odometry Map -->
+    <div id="mini-map">
+        <h3>Robot Localization</h3>
+        <canvas id="localization-canvas" width="200" height="200"></canvas>
+        <div class="map-legend">
+            <div class="legend-item">
+                <span class="legend-color odometry"></span>
+                <span>Odometry Path</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color localization"></span>
+                <span>Localized Position</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color landmarks"></span>
+                <span>Landmarks</span>
+            </div>
         </div>
     </div>
 
-    <script type="importmap">
-        { "imports": { "three": "https://unpkg.com/three@0.161.0/build/three.module.js" } }
-    </script>
-    <script type="module" src="main.js"></script>
+    <!-- Control Panel -->
+    <div id="control-panel">
+        <h3>Navigation Parameters</h3>
+        <div class="control-group">
+            <label>Linear Velocity (Kp)</label>
+            <input type="range" id="linear-kp" min="0.1" max="2.0" step="0.1" value="1.0">
+            <span class="value-display">1.0</span>
+        </div>
+        <div class="control-group">
+            <label>Angular Velocity (Kp)</label>
+            <input type="range" id="angular-kp" min="0.1" max="3.0" step="0.1" value="1.5">
+            <span class="value-display">1.5</span>
+        </div>
+        <div class="control-group">
+            <label>Controller Type</label>
+            <select id="controller-type">
+                <option value="dwa">DWA Controller</option>
+                <option value="pure-pursuit">Pure Pursuit</option>
+                <option value="graceful">Graceful Controller</option>
+            </select>
+        </div>
+        <div class="controller-info">
+            <p id="controller-description">Dynamic Window Approach - Local trajectory optimization</p>
+        </div>
+    </div>
+
+    <!-- Behavior Tree Visualization -->
+    <div id="behavior-tree-panel">
+        <h3>Career Journey Behavior Tree</h3>
+        <div id="behavior-tree-container"></div>
+        <div class="bt-legend">
+            <div class="bt-legend-item">
+                <span class="bt-node sequence"></span>
+                <span>Sequence Node</span>
+            </div>
+            <div class="bt-legend-item">
+                <span class="bt-node selector"></span>
+                <span>Selector Node</span>
+            </div>
+            <div class="bt-legend-item">
+                <span class="bt-node action running"></span>
+                <span>Currently Executing</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main 3D World Container -->
+    <div id="world-container">
+        <canvas id="robotics-world"></canvas>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="project-details"></div>
+        </div>
+    </div>
+
+    <!-- Manual Control Instructions -->
+    <div id="manual-controls" class="hidden">
+        <h3>Manual Controls</h3>
+        <div class="control-keys">
+            <div class="key-group">
+                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+                <p>Move Robot</p>
+            </div>
+            <div class="key-group">
+                <kbd>Q</kbd><kbd>E</kbd>
+                <p>Rotate</p>
+            </div>
+            <div class="key-group">
+                <kbd>Space</kbd>
+                <p>Stop</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Display -->
+    <div id="robot-status">
+        <div class="status-item">
+            <label>Position:</label>
+            <span id="robot-position">X: 0.0, Y: 0.0</span>
+        </div>
+        <div class="status-item">
+            <label>Velocity:</label>
+            <span id="robot-velocity">Linear: 0.0, Angular: 0.0</span>
+        </div>
+        <div class="status-item">
+            <label>Current Goal:</label>
+            <span id="current-goal">None</span>
+        </div>
+    </div>
+
+    <script src="js/behavior-tree.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/robotics-world.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
