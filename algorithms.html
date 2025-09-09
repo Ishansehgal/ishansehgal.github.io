@@ -6,7 +6,7 @@
     <title>Algorithm Visualizations - Ishan Sehgal</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
@@ -31,15 +31,15 @@
     </nav>
 
     <!-- Algorithm Header -->
-    <section class="algorithms-hero">
+    <section class="page-hero">
         <div class="container">
             <h1 class="page-title">Algorithm Visualizations</h1>
-            <p class="page-subtitle">Interactive demonstrations of robotics and computer science algorithms</p>
+            <p class="page-subtitle">Visual demonstrations of core robotics algorithms using Manim</p>
         </div>
     </section>
 
     <!-- Algorithms Grid -->
-    <section class="algorithms-grid-section">
+    <section class="algorithms-section">
         <div class="container">
             <div class="algorithms-grid">
                 
@@ -47,15 +47,20 @@
                 <div class="algorithm-card" data-algorithm="astar">
                     <div class="algorithm-preview">
                         <i class="fas fa-route"></i>
-                        <!-- Replace with video thumbnail -->
+                        <div class="algorithm-overlay">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="algorithm-content">
                         <h3>A* Pathfinding Algorithm</h3>
-                        <p>Visual demonstration of the A* algorithm for optimal pathfinding in robotics navigation systems.</p>
+                        <p>Optimal pathfinding algorithm using heuristic functions for efficient navigation in robotics applications. Demonstrates search space exploration and path optimization.</p>
                         <div class="algorithm-features">
-                            <span class="feature">• Optimal pathfinding</span>
-                            <span class="feature">• Heuristic-based</span>
+                            <span class="feature">• Heuristic-based search</span>
+                            <span class="feature">• Optimal path guarantee</span>
                             <span class="feature">• Real-time visualization</span>
+                            <span class="feature">• Grid-based navigation</span>
                         </div>
                         <button class="btn btn-primary" onclick="openAlgorithmModal('astar')">
                             <i class="fas fa-play"></i> Watch Demo
@@ -66,15 +71,21 @@
                 <!-- SLAM Algorithm -->
                 <div class="algorithm-card" data-algorithm="slam">
                     <div class="algorithm-preview">
-                        <i class="fas fa-map"></i>
+                        <i class="fas fa-map-marked-alt"></i>
+                        <div class="algorithm-overlay">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="algorithm-content">
                         <h3>SLAM Algorithm</h3>
-                        <p>Simultaneous Localization and Mapping demonstration showing how robots build maps while tracking their location.</p>
+                        <p>Simultaneous Localization and Mapping visualization showing how robots build environmental maps while tracking their own position in unknown environments.</p>
                         <div class="algorithm-features">
-                            <span class="feature">• Map building</span>
-                            <span class="feature">• Localization</span>
-                            <span class="feature">• Sensor fusion</span>
+                            <span class="feature">• Simultaneous mapping & localization</span>
+                            <span class="feature">• Sensor data fusion</span>
+                            <span class="feature">• Loop closure detection</span>
+                            <span class="feature">• Uncertainty estimation</span>
                         </div>
                         <button class="btn btn-primary" onclick="openAlgorithmModal('slam')">
                             <i class="fas fa-play"></i> Watch Demo
@@ -86,73 +97,22 @@
                 <div class="algorithm-card" data-algorithm="stereo">
                     <div class="algorithm-preview">
                         <i class="fas fa-eye"></i>
+                        <div class="algorithm-overlay">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="algorithm-content">
                         <h3>Stereo Vision Processing</h3>
-                        <p>Depth estimation from stereo images using computer vision algorithms for 3D perception.</p>
+                        <p>Depth estimation from stereo camera pairs using computer vision algorithms. Shows disparity calculation and 3D reconstruction for robotic perception.</p>
                         <div class="algorithm-features">
-                            <span class="feature">• Depth estimation</span>
-                            <span class="feature">• 3D reconstruction</span>
-                            <span class="feature">• Object detection</span>
+                            <span class="feature">• Depth map generation</span>
+                            <span class="feature">• Disparity calculation</span>
+                            <span class="feature">• 3D point cloud creation</span>
+                            <span class="feature">• Camera calibration</span>
                         </div>
                         <button class="btn btn-primary" onclick="openAlgorithmModal('stereo')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Particle Filter -->
-                <div class="algorithm-card" data-algorithm="particle-filter">
-                    <div class="algorithm-preview">
-                        <i class="fas fa-dot-circle"></i>
-                    </div>
-                    <div class="algorithm-content">
-                        <h3>Particle Filter Localization</h3>
-                        <p>Monte Carlo localization algorithm for robot position estimation using particle filters.</p>
-                        <div class="algorithm-features">
-                            <span class="feature">• Probabilistic localization</span>
-                            <span class="feature">• Monte Carlo method</span>
-                            <span class="feature">• Noise handling</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="openAlgorithmModal('particle-filter')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- PID Controller -->
-                <div class="algorithm-card" data-algorithm="pid">
-                    <div class="algorithm-preview">
-                        <i class="fas fa-sliders-h"></i>
-                    </div>
-                    <div class="algorithm-content">
-                        <h3>PID Controller</h3>
-                        <p>Proportional-Integral-Derivative controller demonstration for precise robot motion control.</p>
-                        <div class="algorithm-features">
-                            <span class="feature">• Motion control</span>
-                            <span class="feature">• Error correction</span>
-                            <span class="feature">• System stability</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="openAlgorithmModal('pid')">
-                            <i class="fas fa-play"></i> Watch Demo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Kalman Filter -->
-                <div class="algorithm-card" data-algorithm="kalman">
-                    <div class="algorithm-preview">
-                        <i class="fas fa-wave-square"></i>
-                    </div>
-                    <div class="algorithm-content">
-                        <h3>Kalman Filter</h3>
-                        <p>State estimation algorithm for filtering noisy sensor data in robotic systems.</p>
-                        <div class="algorithm-features">
-                            <span class="feature">• State estimation</span>
-                            <span class="feature">• Noise filtering</span>
-                            <span class="feature">• Sensor fusion</span>
-                        </div>
-                        <button class="btn btn-primary" onclick="openAlgorithmModal('kalman')">
                             <i class="fas fa-play"></i> Watch Demo
                         </button>
                     </div>
@@ -182,7 +142,22 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Ishan Sehgal. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>&copy; 2025 Ishan Sehgal</p>
+                </div>
+                <div class="footer-right">
+                    <a href="https://github.com/Ishansehgal" class="footer-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/sehgalishan" class="footer-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="mailto:your.email@example.com" class="footer-link">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
 
