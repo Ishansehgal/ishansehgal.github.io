@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Ishan Sehgal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">Ishan Sehgal</a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
+                <a href="algorithms.html" class="nav-link">Algorithms</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Projects Header -->
+    <section class="projects-hero">
+        <div class="container">
+            <h1 class="page-title">My Projects</h1>
+            <p class="page-subtitle">Innovative robotics solutions and autonomous systems</p>
+        </div>
+    </section>
+
+    <!-- Project Filters -->
+    <section class="project-filters">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="robotics">Robotics</button>
+                <button class="filter-btn" data-filter="vision">Computer Vision</button>
+                <button class="filter-btn" data-filter="navigation">Navigation</button>
+                <button class="filter-btn" data-filter="hardware">Hardware</button>
+                <button class="filter-btn" data-filter="web">Web Interface</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-grid-section">
+        <div class="container">
+            <div class="projects-grid">
+                
+                <!-- Stereo Vision Project -->
+                <div class="project-card detailed" data-category="vision robotics">
+                    <div class="project-image">
+                        <i class="fas fa-camera"></i>
+                        <!-- Replace with actual image: <img src="images/stereo-vision.jpg" alt="Stereo Vision System"> -->
+                    </div>
+                    <div class="project-content">
+                        <h3>Stereo Vision System</h3>
+                        <p>Advanced stereo image processing with depth estimation, object detection, and real-time visualization. Includes mathematical frameworks for stereo processing and inlier/outlier detection algorithms.</p>
+                        <div class="project-tags">
+                            <span class="tag">Computer Vision</span>
+                            <span class="tag">ROS2</span>
+                            <span class="tag">C++</span>
+                            <span class="tag">OpenCV</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=stereo-vision" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation System -->
+                <div class="project-card detailed" data-category="robotics navigation">
+                    <div class="project-image">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>ROS2 Autonomous Navigation</h3>
+                        <p>Complete navigation stack with SLAM, localization, path planning, and obstacle avoidance. Features custom behavior tree nodes and real-time monitoring systems.</p>
+                        <div class="project-tags">
+                            <span class="tag">ROS2</span>
+                            <span class="tag">SLAM</span>
+                            <span class="tag">Navigation</span>
+                            <span class="tag">Behavior Trees</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=navigation-system" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring System -->
+                <div class="project-card detailed" data-category="robotics web">
+                    <div class="project-image">
+                        <i class="fas fa-monitor-heart-rate"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Robot Monitoring System</h3>
+                        <p>Comprehensive logging and monitoring solution with FIFO queues, real-time data visualization using Grafana/Loki, and web-based control interfaces.</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Grafana</span>
+                            <span class="tag">Web API</span>
+                            <span class="tag">Real-time</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=monitoring-system" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motor Control System -->
+                <div class="project-card detailed" data-category="hardware robotics">
+                    <div class="project-image">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Advanced Motor Control</h3>
+                        <p>BLDC hub motor control with JY01 driver IC, PWM control systems, current sensing, and multi-wire switching for precise robotic movement.</p>
+                        <div class="project-tags">
+                            <span class="tag">Hardware</span>
+                            <span class="tag">Motor Control</span>
+                            <span class="tag">PWM</span>
+                            <span class="tag">Embedded</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=motor-control" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intel RealSense Integration -->
+                <div class="project-card detailed" data-category="vision robotics">
+                    <div class="project-image">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Intel RealSense Integration</h3>
+                        <p>Point cloud processing system with depth-to-pointcloud conversion, coordinate transformations, and real-time visualization in RViz.</p>
+                        <div class="project-tags">
+                            <span class="tag">Intel RealSense</span>
+                            <span class="tag">Point Cloud</span>
+                            <span class="tag">PCL</span>
+                            <span class="tag">ROS2</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=realsense-integration" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web Robot Control -->
+                <div class="project-card detailed" data-category="web robotics">
+                    <div class="project-image">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Web-based Robot Control</h3>
+                        <p>FastAPI-based robot control interface with real-time status monitoring, path goal sending, and remote operation capabilities through web browsers.</p>
+                        <div class="project-tags">
+                            <span class="tag">FastAPI</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">REST API</span>
+                            <span class="tag">Remote Control</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="project-detail.html?project=web-control" class="btn btn-primary">View Details</a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Ishan Sehgal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

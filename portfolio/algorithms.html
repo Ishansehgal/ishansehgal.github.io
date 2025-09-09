@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizations - Ishan Sehgal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">Ishan Sehgal</a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="algorithms.html" class="nav-link active">Algorithms</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Algorithm Header -->
+    <section class="algorithms-hero">
+        <div class="container">
+            <h1 class="page-title">Algorithm Visualizations</h1>
+            <p class="page-subtitle">Interactive demonstrations of robotics and computer science algorithms</p>
+        </div>
+    </section>
+
+    <!-- Algorithms Grid -->
+    <section class="algorithms-grid-section">
+        <div class="container">
+            <div class="algorithms-grid">
+                
+                <!-- A* Algorithm -->
+                <div class="algorithm-card" data-algorithm="astar">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-route"></i>
+                        <!-- Replace with video thumbnail -->
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>A* Pathfinding Algorithm</h3>
+                        <p>Visual demonstration of the A* algorithm for optimal pathfinding in robotics navigation systems.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• Optimal pathfinding</span>
+                            <span class="feature">• Heuristic-based</span>
+                            <span class="feature">• Real-time visualization</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('astar')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SLAM Algorithm -->
+                <div class="algorithm-card" data-algorithm="slam">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>SLAM Algorithm</h3>
+                        <p>Simultaneous Localization and Mapping demonstration showing how robots build maps while tracking their location.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• Map building</span>
+                            <span class="feature">• Localization</span>
+                            <span class="feature">• Sensor fusion</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('slam')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stereo Vision -->
+                <div class="algorithm-card" data-algorithm="stereo">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>Stereo Vision Processing</h3>
+                        <p>Depth estimation from stereo images using computer vision algorithms for 3D perception.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• Depth estimation</span>
+                            <span class="feature">• 3D reconstruction</span>
+                            <span class="feature">• Object detection</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('stereo')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Particle Filter -->
+                <div class="algorithm-card" data-algorithm="particle-filter">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-dot-circle"></i>
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>Particle Filter Localization</h3>
+                        <p>Monte Carlo localization algorithm for robot position estimation using particle filters.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• Probabilistic localization</span>
+                            <span class="feature">• Monte Carlo method</span>
+                            <span class="feature">• Noise handling</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('particle-filter')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PID Controller -->
+                <div class="algorithm-card" data-algorithm="pid">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>PID Controller</h3>
+                        <p>Proportional-Integral-Derivative controller demonstration for precise robot motion control.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• Motion control</span>
+                            <span class="feature">• Error correction</span>
+                            <span class="feature">• System stability</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('pid')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kalman Filter -->
+                <div class="algorithm-card" data-algorithm="kalman">
+                    <div class="algorithm-preview">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <div class="algorithm-content">
+                        <h3>Kalman Filter</h3>
+                        <p>State estimation algorithm for filtering noisy sensor data in robotic systems.</p>
+                        <div class="algorithm-features">
+                            <span class="feature">• State estimation</span>
+                            <span class="feature">• Noise filtering</span>
+                            <span class="feature">• Sensor fusion</span>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAlgorithmModal('kalman')">
+                            <i class="fas fa-play"></i> Watch Demo
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithm Modal -->
+    <div id="algorithmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Algorithm Visualization</h2>
+                <span class="close" onclick="closeAlgorithmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="video-container" id="videoContainer">
+                    <!-- Video will be inserted here -->
+                </div>
+                <div class="algorithm-explanation" id="algorithmExplanation">
+                    <!-- Explanation content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Ishan Sehgal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
