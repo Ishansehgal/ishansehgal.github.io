@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 25% 8%;
+    --foreground: 180 100% 95%;
+
+    --card: 220 25% 10%;
+    --card-foreground: 180 100% 95%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 180 100% 95%;
+
+    --primary: 160 84% 45%;
+    --primary-foreground: 220 25% 8%;
+
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 180 100% 95%;
+
+    --muted: 220 20% 18%;
+    --muted-foreground: 180 15% 65%;
+
+    --accent: 175 70% 50%;
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 15%;
+    --ring: 160 84% 45%;
+
+    --radius: 0.75rem;
+
+    /* Custom design tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(220 25% 8% / 0.95), hsl(220 25% 12% / 0.9));
+    --card-gradient: linear-gradient(135deg, hsl(220 25% 10% / 0.8), hsl(220 25% 12% / 0.6));
+    --glow: 0 0 30px hsl(160 84% 45% / 0.3);
+    --glow-strong: 0 0 40px hsl(160 84% 45% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  }
+
+  .card-glass {
+    @apply backdrop-blur-md bg-card/80 border border-border/50;
+  }
+
+  .glow-text {
+    text-shadow: var(--glow);
+  }
+
+  .glow-box {
+    box-shadow: var(--glow);
+  }
+}
