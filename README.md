@@ -23,6 +23,20 @@ The codebase is built with a minimalist and performance-focused tech stack:
 - **Expertise**: Detailed breakdown of my technical skills (ROS2, Nav2, C++, etc.).
 - **Projects**: Highlights of major projects like **Regbetel Labs**, **TARS**, and **Eyantra**.
 
+## 🚀 Deployment
+
+**Critical Step for GitHub Pages:**
+Since this project uses a build step (Vite), you must configure GitHub Pages to serve the built files, not the source code.
+
+1.  Go to your Repository **Settings** on GitHub.
+2.  Navigate to **Pages** (in the left sidebar).
+3.  Under **Build and deployment** > **Source**, ensure "Deploy from a branch" is selected.
+4.  Under **Branch**, select **`gh-pages`** as the source branch.
+    *   *Note: The `gh-pages` branch is automatically created by the "Deploy Vite app to GitHub Pages" Action after you push.*
+5.  Click **Save**.
+
+The site should now load correctly from the `gh-pages` branch.
+
 ## 🔧 Local Development
 
 To run this project locally:
