@@ -2,20 +2,20 @@ import { useRef, useEffect } from "react";
 
 const skills = [
   {
+    category: "Navigation & Control",
+    items: ["ROS2 Navigation (Nav2)", "ROS2 Control", "Behavior Trees", "Path Planning", "mpc_local_planner"]
+  },
+  {
+    category: "Localization & SLAM",
+    items: ["Beluga (MCL)", "AMCL", "RTAB-Map", "Sensor Fusion", "Odometry Calibration"]
+  },
+  {
     category: "Core Robotics",
-    items: ["ROS2 (Humble/Iron)", "Navigation2 (Nav2)", "Gazebo Simulation", "URDF/XACRO"]
+    items: ["URDF/XACRO", "Gazebo / Ignition", "Kinematics", "TF2", "Lifecycle Nodes"]
   },
   {
-    category: "Localization & Mapping",
-    items: ["SLAM", "AMCL", "Beluga (MCL)", "RTAB-Map", "Odometry Fusion"]
-  },
-  {
-    category: "Programming & Tools",
-    items: ["C++", "Python", "CMake", "Git/GitHub", "Docker", "Linux"]
-  },
-  {
-    category: "Embedded & Hardware",
-    items: ["Microcontrollers", "Sensor Integration", "Motor Control", "PCB Design"]
+    category: "Dev Ops & Tools",
+    items: ["Docker", "CMake", "Git", "Linux (Ubuntu)", "CI/CD for ROS"]
   }
 ];
 
@@ -43,33 +43,26 @@ export const Expertise = () => {
   return (
     <section id="expertise" className="py-20 md:py-32">
       <div ref={containerRef} className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-sm font-bold tracking-widest uppercase mb-8 block reveal">Expertise</span>
+        <div className="max-w-5xl mx-auto">
+          <span className="text-sm font-bold tracking-widest uppercase mb-12 block reveal text-primary">Technical Arsenal</span>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
             {skills.map((skillGroup, index) => (
-              <div key={index} className="reveal space-y-4">
-                <h3 className="text-xl font-bold border-b border-muted-foreground/20 pb-2">
+              <div key={index} className="reveal">
+                <h3 className="text-xl font-bold border-b border-primary/20 pb-4 mb-4 flex items-center justify-between">
                   {skillGroup.category}
+                  <span className="text-xs text-muted-foreground font-mono">0{index + 1}</span>
                 </h3>
-                <ul className="space-y-2">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {skillGroup.items.map((item, i) => (
-                    <li key={i} className="text-muted-foreground hover:text-foreground transition-colors">
+                    <li key={i} className="text-muted-foreground hover:text-white transition-colors text-sm flex items-center gap-2">
+                      <span className="w-1 h-1 bg-primary rounded-full"></span>
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
-          </div>
-
-          <div className="mt-16 reveal p-6 border border-border bg-secondary/20">
-            <h4 className="text-lg font-bold mb-2">Recent Focus: Regbetel Labs</h4>
-            <p className="text-muted-foreground">
-              Deep dive into <strong>ROS2 Navigation stack</strong>. Worked extensively on custom plugins for Nav2,
-              optimizing odometry pipelines, and implementing robust localization solutions using tools like
-              <strong>Beluga</strong> and standard <strong>AMCL</strong>. Trusted to deliver production-ready navigation behaviors.
-            </p>
           </div>
         </div>
       </div>

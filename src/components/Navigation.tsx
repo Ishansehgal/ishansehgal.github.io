@@ -47,6 +47,12 @@ export const Navigation = () => {
               About
             </button>
             <button
+              onClick={() => scrollToSection("experience")}
+              className="text-sm hover:text-primary transition-colors uppercase tracking-wider font-medium"
+            >
+              Journey
+            </button>
+            <button
               onClick={() => scrollToSection("expertise")}
               className="text-sm hover:text-primary transition-colors uppercase tracking-wider font-medium"
             >
