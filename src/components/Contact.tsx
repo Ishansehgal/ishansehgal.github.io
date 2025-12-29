@@ -18,7 +18,7 @@ export const Contact = () => {
             className="bg-primary hover:bg-primary/90 glow-box"
             asChild
           >
-            <a href="mailto:your.email@example.com">
+            <a href="mailto:sehgalishan26@gmail.com">
               <Mail className="mr-2 h-5 w-5" />
               Email Me
             </a>
@@ -40,7 +40,7 @@ export const Contact = () => {
             className="border-primary/50 hover:bg-primary/10"
             asChild
           >
-            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/sehgalishan/" target="_blank" rel="noopener noreferrer">
               <Linkedin className="mr-2 h-5 w-5" />
               LinkedIn
             </a>
