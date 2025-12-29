@@ -54,7 +54,7 @@ export const Hero = () => {
                 A <span className="font-bold text-foreground">Robotics Developer</span> architecting robust autonomous systems.
               </h2>
               <p className="text-base text-muted-foreground leading-relaxed">
-                Bridging the physical and digital worlds. Specialized in **ROS2 Control**, **Behavior Trees**, and **Navigation Stacks**.
+                Bridging the physical and digital worlds. Specialized in <strong>ROS2 Control</strong>, <strong>Behavior Trees</strong>, and <strong>Navigation Stacks</strong>.
                 Solving complex kinematic problems to bring hardware to life.
               </p>
 
