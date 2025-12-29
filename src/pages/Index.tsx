@@ -23,7 +23,7 @@ const Index = () => {
       <footer className="py-12 px-4 border-t border-border/50 bg-black/50 backdrop-blur-md">
         <div className="container mx-auto text-center">
           <p className="text-sm text-muted-foreground">© 2024 Ishan Sehgal. Built with React, Vite & ROS2 passion.</p>
-          <p className="text-xs text-muted-foreground/50 mt-2"> sehgalishan26@gmail.com </p>
+          <a href="mailto:sehgalishan26@gmail.com" className="text-xs text-muted-foreground/50 mt-2 hover:text-primary transition-colors"> sehgalishan26@gmail.com </a>
         </div>
       </footer>
     </div>
