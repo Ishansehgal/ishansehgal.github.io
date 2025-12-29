@@ -1,104 +1,86 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import heroBg1 from "@/assets/hero-bg-1.jpg";
-import heroBg2 from "@/assets/hero-bg-2.jpg";
-import heroBg3 from "@/assets/hero-bg-3.jpg";
-
-const backgrounds = [heroBg1, heroBg2, heroBg3];
+import { useRef, useEffect } from "react";
+import roboCar from "../assets/robocar_sketch.png";
 
 export const Hero = () => {
-  const [currentBg, setCurrentBg] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgrounds.length);
-    }, 5000);
-    return () => clearInterval(interval);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = containerRef.current?.querySelectorAll(".reveal");
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Slideshow */}
-      {backgrounds.map((bg, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentBg ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <img
-            src={bg}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
-        </div>
-      ))}
-
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="inline-block px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-6 animate-fade-in">
-          <span className="text-primary font-mono text-sm">🤖 Robotics Developer</span>
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-          Hi, I'm <span className="text-gradient glow-text">Ishan Sehgal</span>
-        </h1>
-
-        <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-3xl mx-auto animate-fade-in">
-          ROS2 Developer & Autonomous Systems Engineer
-        </p>
-
-        <p className="text-base md:text-lg text-muted-foreground/80 mb-8 max-w-2xl mx-auto animate-fade-in">
-          From building Arduino-based obstacle avoidance cars to developing enterprise-grade
-          autonomous navigation systems. Specialized in ROS2, behavior trees, and real-world
-          robotics implementations with hands-on experience across simulation and hardware.
-        </p>
-
-        <div className="flex flex-wrap gap-4 justify-center mb-12 animate-fade-in">
-          <Button
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground glow-box"
-            onClick={() => scrollToSection("projects")}
-          >
-            View Projects
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-primary/50 text-primary hover:bg-primary/10"
-            onClick={() => scrollToSection("contact")}
-          >
-            Get in Touch
-          </Button>
-        </div>
-
-        {/* Code Snippet */}
-        <div className="max-w-2xl mx-auto card-glass rounded-lg p-6 text-left animate-fade-in">
-          <pre className="text-sm font-mono">
-            <code className="text-primary">import</code> <code>rclpy</code>
-            {"\n"}
-            <code className="text-accent">from</code> <code>nav2_simple_commander</code> <code className="text-accent">import</code> <code>BasicNavigator</code>
-            {"\n\n"}
-            <code className="text-accent">def</code> <code className="text-foreground">autonomous_navigation</code>():
-            {"\n  "}
-            <code>navigator = BasicNavigator()</code>
-            {"\n  "}
-            <code>goal_pose = create_pose(</code><code className="text-primary">2.0</code>, <code className="text-primary">1.0</code>)
-            {"\n  "}
-            <code>navigator.goToPose(goal_pose)</code>
-          </pre>
-        </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* Moving Background Animation */}
+      <div className="absolute inset-0 pointer-events-none opacity-10 flex items-end pb-10 z-0">
+        <img
+          src={roboCar}
+          alt="Robocar Sketch"
+          className="w-48 h-auto animate-move-bot"
+        />
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex items-start justify-center p-2">
-          <div className="w-1 h-3 bg-primary rounded-full" />
+      <div ref={containerRef} className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="reveal space-y-4">
+            <p className="text-lg md:text-xl font-medium tracking-wide">
+              HELLO, I AM
+            </p>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-none">
+              ISHAN
+              <br />
+              SEHGAL
+            </h1>
+          </div>
+
+          <div className="reveal space-y-6 max-w-2xl">
+            <h2 className="text-2xl md:text-4xl font-light leading-tight">
+              A <span className="font-bold">Robotics Delevoper</span> bridging the gap between hardware and software.
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Specializing in ROS2, Navigation, and Autonomous Systems. I solve complex problems to bring robots to life.
+            </p>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a
+                href="https://www.linkedin.com/in/sehgalishan/"
+                target="_blank"
+                rel="noreferrer"
+                className="px-8 py-3 bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                LINKEDIN
+              </a>
+              <a
+                href="https://github.com/Ishansehgal"
+                target="_blank"
+                rel="noreferrer"
+                className="px-8 py-3 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                GITHUB
+              </a>
+              <a
+                href="/resum (1).pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="px-8 py-3 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                RESUME
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>

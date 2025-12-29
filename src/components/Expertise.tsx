@@ -1,69 +1,76 @@
-import { Brain, Navigation, Cpu, Camera, GitBranch, Cog } from "lucide-react";
+import { useRef, useEffect } from "react";
 
-const expertiseAreas = [
+const skills = [
   {
-    icon: Navigation,
-    title: "ROS2 Navigation",
-    skills: ["Nav2 Stack", "Behavior Trees", "Custom Plugins", "Path Planning"],
+    category: "Core Robotics",
+    items: ["ROS2 (Humble/Iron)", "Navigation2 (Nav2)", "Gazebo Simulation", "URDF/XACRO"]
   },
   {
-    icon: Camera,
-    title: "SLAM & Localization",
-    skills: ["Beluga SLAM", "Visual Odometry", "Sensor Fusion", "Mapping"],
+    category: "Localization & Mapping",
+    items: ["SLAM", "AMCL", "Beluga (MCL)", "RTAB-Map", "Odometry Fusion"]
   },
   {
-    icon: Brain,
-    title: "Autonomous Systems",
-    skills: ["AMR Development", "Decision Making", "Obstacle Avoidance", "System Integration"],
+    category: "Programming & Tools",
+    items: ["C++", "Python", "CMake", "Git/GitHub", "Docker", "Linux"]
   },
   {
-    icon: Cpu,
-    title: "Robotics Hardware",
-    skills: ["Motor Control", "Sensor Integration", "LiDAR Systems", "Embedded Systems"],
-  },
-  {
-    icon: Cog,
-    title: "Robotic Arms",
-    skills: ["UR5 Arm", "Motion Planning", "Warehouse Automation", "Pick & Place"],
-  },
-  {
-    icon: GitBranch,
-    title: "Research & Development",
-    skills: ["Algorithm Development", "System Optimization", "Failure Resistance", "Performance Tuning"],
-  },
+    category: "Embedded & Hardware",
+    items: ["Microcontrollers", "Sensor Integration", "Motor Control", "PCB Design"]
+  }
 ];
 
 export const Expertise = () => {
-  return (
-    <section className="py-20 px-4 bg-muted/20">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
-          Areas of <span className="text-gradient">Expertise</span>
-        </h2>
+  const containerRef = useRef<HTMLDivElement>(null);
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {expertiseAreas.map((area, index) => (
-            <div
-              key={index}
-              className="card-glass rounded-xl p-6 hover:glow-box transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="mb-4">
-                <div className="p-3 rounded-lg bg-primary/10 border border-primary/30 inline-flex">
-                  <area.icon className="w-6 h-6 text-primary" />
-                </div>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = containerRef.current?.querySelectorAll(".reveal");
+    elements?.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section id="expertise" className="py-20 md:py-32">
+      <div ref={containerRef} className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <span className="text-sm font-bold tracking-widest uppercase mb-8 block reveal">Expertise</span>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {skills.map((skillGroup, index) => (
+              <div key={index} className="reveal space-y-4">
+                <h3 className="text-xl font-bold border-b border-muted-foreground/20 pb-2">
+                  {skillGroup.category}
+                </h3>
+                <ul className="space-y-2">
+                  {skillGroup.items.map((item, i) => (
+                    <li key={i} className="text-muted-foreground hover:text-foreground transition-colors">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <h3 className="text-xl font-semibold mb-3">{area.title}</h3>
-              <ul className="space-y-2">
-                {area.skills.map((skill, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="mt-16 reveal p-6 border border-border bg-secondary/20">
+            <h4 className="text-lg font-bold mb-2">Recent Focus: Regbetel Labs</h4>
+            <p className="text-muted-foreground">
+              Deep dive into <strong>ROS2 Navigation stack</strong>. Worked extensively on custom plugins for Nav2,
+              optimizing odometry pipelines, and implementing robust localization solutions using tools like
+              <strong>Beluga</strong> and standard <strong>AMCL</strong>. Trusted to deliver production-ready navigation behaviors.
+            </p>
+          </div>
         </div>
       </div>
     </section>

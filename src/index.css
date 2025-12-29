@@ -1,79 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 220 25% 8%;
-    --foreground: 180 100% 95%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
-    --card: 220 25% 10%;
-    --card-foreground: 180 100% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 220 25% 10%;
-    --popover-foreground: 180 100% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 160 84% 45%;
-    --primary-foreground: 220 25% 8%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 15%;
-    --secondary-foreground: 180 100% 95%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 220 20% 18%;
-    --muted-foreground: 180 15% 65%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 175 70% 50%;
-    --accent-foreground: 220 25% 8%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 15%;
-    --ring: 160 84% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
 
-    --radius: 0.75rem;
-
-    /* Custom design tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(220 25% 8% / 0.95), hsl(220 25% 12% / 0.9));
-    --card-gradient: linear-gradient(135deg, hsl(220 25% 10% / 0.8), hsl(220 25% 12% / 0.6));
-    --glow: 0 0 30px hsl(160 84% 45% / 0.3);
-    --glow-strong: 0 0 40px hsl(160 84% 45% / 0.5);
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
+    --radius: 0.5rem;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground font-['Space_Grotesk'] antialiased;
+    overflow-x: hidden;
   }
 
-  html {
-    scroll-behavior: smooth;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-['Syne'] font-bold;
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  .clip-path-slant {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
   }
+  
+  .text-stroke {
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+  }
+}
 
-  .card-glass {
-    @apply backdrop-blur-md bg-card/80 border border-border/50;
+/* Moving Bot Animation */
+@keyframes moveBot {
+  0% {
+    transform: translateX(-100%) translateY(0) rotate(0deg);
   }
+  25% {
+    transform: translateX(25vw) translateY(-20px) rotate(2deg);
+  }
+  50% {
+    transform: translateX(50vw) translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateX(75vw) translateY(20px) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(100vw) translateY(0) rotate(0deg);
+  }
+}
 
-  .glow-text {
-    text-shadow: var(--glow);
-  }
+.animate-move-bot {
+  animation: moveBot 20s linear infinite;
+}
 
-  .glow-box {
-    box-shadow: var(--glow);
-  }
+/* Reveal Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
 }
