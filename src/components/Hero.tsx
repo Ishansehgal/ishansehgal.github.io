@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import roboCar from "../assets/robocar_sketch.png";
 import profileImg from "../assets/profile.jpg";
-import tarsGif from "../assets/one.gif";
+
 
 export const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,23 +39,15 @@ export const Hero = () => {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           <div className="order-2 md:order-1 space-y-8">
-            <div className="reveal space-y-4 relative">
+            <div className="reveal space-y-4">
               <p className="text-lg md:text-xl font-medium tracking-wide text-primary/80">
                 HELLO, I AM
               </p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none relative z-10">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none">
                 ISHAN
                 <br />
                 SEHGAL
               </h1>
-              {/* TARS GIF Decoration */}
-              <div className="absolute -right-12 top-0 hidden lg:block opacity-80 mix-blend-screen pointer-events-none">
-                <img
-                  src={tarsGif}
-                  alt="TARS Robot"
-                  className="w-32 h-auto object-contain skew-y-6 opacity-60 hover:opacity-100 transition-opacity duration-500"
-                />
-              </div>
             </div>
 
             <div className="reveal space-y-6 max-w-xl">
@@ -102,6 +94,6 @@ export const Hero = () => {
 
         </div>
       </div>
-    </section>
+    </section >
   );
 };
