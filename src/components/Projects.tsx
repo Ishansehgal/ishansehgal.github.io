@@ -27,6 +27,12 @@ const projects = [
     link: "https://github.com/Ishansehgal/Autonomous-E-bot"
   },
   {
+    title: "Unitree G1 Humanoid Development",
+    description: "Hands-on experience with the Unitree G1 Education humanoid robot. Implemented autonomous navigation, SLAM, and custom motion control algorithms, focusing on humanoid kinematics and dynamic stability.",
+    tech: ["ROS2", "Unitree SDK", "SLAM", "Navigation", "C++"],
+    link: ""
+  },
+  {
     title: "Social Navigation Research",
     description: "Current research focus on exploring socially aware navigation behaviors for robots operating in crowded human environments. (Work in Progress)",
     tech: ["ROS2", "Social Force Model", "Human-Robot Interaction"],
@@ -78,9 +84,11 @@ export const Projects = () => {
                     <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
                       {project.title}
                     </h3>
-                    <a href={project.link} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                      <ArrowUpRight className="w-5 h-5" />
-                    </a>
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                        <ArrowUpRight className="w-5 h-5" />
+                      </a>
+                    )}
                   </div>
                   <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                     {project.description}
