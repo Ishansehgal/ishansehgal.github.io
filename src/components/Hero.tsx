@@ -69,7 +69,7 @@ export const Hero = () => {
                   LINKEDIN
                 </a>
                 <a
-                  href="/resume.pdf"
+                  href="/Ishan_Sehgal_r.pdf"
                   target="_blank"
                   rel="noreferrer"
                   className="px-8 py-3 border border-white/20 text-white text-sm font-bold hover:bg-white hover:text-black transition-all tracking-widest"
