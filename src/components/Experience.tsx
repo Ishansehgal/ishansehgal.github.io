@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 
 const experiences = [
     {
-        company: "Regbetel Labs",
+        company: "Rigbetel Labs",
         role: "Robotics Developer",
         period: "Present",
         description: "Spearheading the development of autonomous navigation stacks using ROS2. Implementing custom Nav2 plugins and optimizing localization pipelines with Beluga and AMCL for reliable performance in dynamic environments.",
