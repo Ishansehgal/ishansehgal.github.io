@@ -316,53 +316,135 @@ main > section {
     0 10px 26px -20px hsl(0 0% 0% / 0.6);
 }
 
-/* the fixed overlay that hosts every in-world banner */
+/* the fixed overlay that hosts the stop boards */
 .holo-layer {
   position: fixed;
   inset: 0;
   z-index: 20;
   pointer-events: none;
-  overflow: hidden;
 }
 
-/* JS parks this at the waypoint's projected screen point each frame */
-.holo-anchor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-
-/* the banner itself: sits on top of the anchor point and rises into place */
+/* a lit board standing on the left of the stage (TARS sits on the right) */
 .holo-card {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: min(88vw, 560px);
-  max-height: 82vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  transform-origin: 50% 100%;
+  position: fixed;
+  left: clamp(14px, 4vw, 56px);
+  top: 80px;
+  bottom: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+  height: max-content;
+  width: min(46vw, 540px);
+  max-height: calc(100vh - 104px);
+  display: flex;
+  flex-direction: column;
+  /* near-opaque (no backdrop-filter: it breaks under the 3D transform) */
+  background: hsl(var(--card) / 0.975);
+  border: 1px solid hsl(var(--foreground) / 0.22);
+  box-shadow:
+    0 0 0 1px hsl(var(--primary) / 0.14),
+    0 -16px 90px -34px hsl(var(--primary) / 0.65),
+    0 50px 90px -40px hsl(var(--foreground) / 0.6);
+  transform-origin: 18% 120%;
   transform:
-    translate(-50%, -100%)
-    translateY(calc((1 - var(--f, 0)) * 54px))
+    perspective(1500px)
+    rotateX(calc((1 - var(--f, 0)) * 11deg))
+    rotateY(calc((1 - var(--f, 0)) * -6deg))
+    translateY(calc((1 - var(--f, 0)) * 60px))
     scale(calc(0.95 + var(--f, 0) * 0.05));
   opacity: var(--f, 0);
-  /* projector-light halo: reads as a board lit from the beam below */
-  box-shadow:
-    0 0 0 1px hsl(var(--primary) / 0.16),
-    0 -12px 70px -26px hsl(var(--primary) / 0.55),
-    0 44px 90px -44px hsl(var(--foreground) / 0.55);
+  will-change: transform, opacity;
 }
 
-.holo-card::-webkit-scrollbar {
+/* lit top seam — the projector beam hitting the board edge */
+.holo-card::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary)), transparent);
+  box-shadow: 0 0 16px 1px hsl(var(--primary) / 0.85);
+}
+
+/* corner registration brackets */
+.holo-card::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  background:
+    linear-gradient(hsl(var(--primary)) 0 0) left top / 15px 2px no-repeat,
+    linear-gradient(hsl(var(--primary)) 0 0) left top / 2px 15px no-repeat,
+    linear-gradient(hsl(var(--primary)) 0 0) right bottom / 15px 2px no-repeat,
+    linear-gradient(hsl(var(--primary)) 0 0) right bottom / 2px 15px no-repeat;
+  opacity: 0.65;
+}
+
+.holo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  padding: 11px 16px;
+  border-bottom: 1px solid hsl(var(--foreground) / 0.16);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.holo-code {
+  color: hsl(var(--primary));
+  font-weight: 600;
+}
+.holo-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: hsl(var(--muted-foreground));
+}
+.holo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: hsl(var(--primary));
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+.holo-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1.1rem, 2.2vw, 1.9rem);
+}
+.holo-scroll::-webkit-scrollbar {
   width: 6px;
 }
-.holo-card::-webkit-scrollbar-thumb {
+.holo-scroll::-webkit-scrollbar-thumb {
   background: hsl(var(--foreground) / 0.25);
 }
 
-/* content inside a banner is shown immediately — proximity drives it, not scroll */
+/* dark board for the goal / contact stop */
+.holo-dark {
+  background: hsl(30 12% 8% / 0.96);
+  border-color: hsl(0 0% 100% / 0.14);
+}
+.holo-dark .holo-head {
+  border-color: hsl(0 0% 100% / 0.14);
+}
+
+/* the bare section content fills the board — drop its own panel chrome */
+.holo-card .wp {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.holo-card .wp::before {
+  display: none;
+}
+/* content is shown immediately inside a board — proximity drives it, not scroll */
 .holo-card .reveal {
   opacity: 1 !important;
   transform: none !important;
@@ -370,6 +452,53 @@ main > section {
 }
 .holo-card .reveal-line {
   transform: scaleX(1) !important;
+}
+
+/* reflow the section content into a single readable column for the board */
+.holo-card .grid {
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+}
+.holo-card h1 {
+  font-size: clamp(2rem, 6vw, 2.6rem) !important;
+}
+.holo-card h2 {
+  font-size: clamp(1.5rem, 4.4vw, 2.1rem) !important;
+  line-height: 1.04 !important;
+}
+.holo-card h3 {
+  font-size: 1.02rem !important;
+}
+.holo-card .max-w-2xl,
+.holo-card .max-w-xl,
+.holo-card .max-w-4xl {
+  max-width: 100% !important;
+}
+.holo-card .lg\:sticky {
+  position: static !important;
+}
+
+/* mobile: a bottom sheet so it stays fully visible and feels the same */
+@media (max-width: 767px) {
+  .holo-card {
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: 10px;
+    margin: 0;
+    width: auto;
+    max-height: 62vh;
+    transform-origin: 50% 100%;
+    transform:
+      translateY(calc((1 - var(--f, 0)) * 56px))
+      scale(calc(0.96 + var(--f, 0) * 0.04));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-card {
+    transform: none;
+  }
 }
 
 .teleop-on .holo-layer {

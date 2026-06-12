@@ -1,11 +1,10 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import {
   getPose,
   tracePose,
   collides,
-  panelAnchor,
   WAYPOINTS,
   OBSTACLES,
   PATH_LENGTH,
@@ -190,6 +189,18 @@ const Goal = () => {
   });
   return (
     <group position={[pose.x, 0, pose.z]}>
+      {/* lit finish gate */}
+      {[-1.7, 1.7].map((sx, i) => (
+        <mesh key={i} position={[sx, 2, 0]}>
+          <boxGeometry args={[0.18, 4, 0.18]} />
+          <meshStandardMaterial color={INK} />
+        </mesh>
+      ))}
+      <mesh position={[0, 4.05, 0]}>
+        <boxGeometry args={[3.7, 0.22, 0.22]} />
+        <meshStandardMaterial color={ORANGE} emissive={ORANGE} emissiveIntensity={1.5} />
+      </mesh>
+
       <mesh position={[0, 1.6, 0]}>
         <cylinderGeometry args={[0.045, 0.045, 3.2, 10]} />
         <meshStandardMaterial color={INK} />
@@ -375,25 +386,104 @@ const Projector = ({ t }: { t: number }) => {
   );
 };
 
-/* ---------- distant scenery for depth ---------- */
+/* ---------- gradient sky + atmosphere ---------- */
 
-const SCENERY: [number, number, number][] = [
-  [3, 13, 4.5], [9, -14, 6], [24, 15, 7.5], [30, -15, 5.5],
-  [38, 14, 6.5], [46, -13, 5], [44, 13, 7], [16, 15, 5],
+const Sky = () => {
+  const { scene } = useThree();
+  useEffect(() => {
+    const c = document.createElement("canvas");
+    c.width = 2;
+    c.height = 256;
+    const ctx = c.getContext("2d")!;
+    const g = ctx.createLinearGradient(0, 0, 0, 256);
+    g.addColorStop(0, "#d4e1f1"); // cool sky
+    g.addColorStop(0.5, "#e7ebe7");
+    g.addColorStop(1, PAPER); // meets the fogged horizon
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 2, 256);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    scene.background = tex;
+    return () => {
+      tex.dispose();
+    };
+  }, [scene]);
+  return null;
+};
+
+const Dust = () => {
+  const points = useRef<THREE.Points>(null);
+  const geom = useMemo(() => {
+    const N = 300;
+    const pos = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      pos[i * 3] = Math.random() * 60 - 6;
+      pos[i * 3 + 1] = Math.random() * 8.5 + 0.6;
+      pos[i * 3 + 2] = Math.random() * 30 - 15;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    return g;
+  }, []);
+  useFrame(({ clock }) => {
+    if (points.current) points.current.position.y = Math.sin(clock.elapsedTime * 0.3) * 0.25;
+  });
+  return (
+    <points ref={points} geometry={geom}>
+      <pointsMaterial
+        color="#c39a72"
+        size={0.05}
+        sizeAttenuation
+        transparent
+        opacity={0.5}
+        depthWrite={false}
+      />
+    </points>
+  );
+};
+
+/* ---------- distant scenery: lit beacon towers for depth ---------- */
+
+// x, z, height, kind (0 plain · 1 orange beacon · 2 blueprint beacon)
+const SCENERY: [number, number, number, number][] = [
+  [3, 13, 4.5, 1], [9, -14, 6, 0], [24, 15, 7.5, 2], [30, -15, 5.5, 1],
+  [38, 14, 6.5, 0], [46, -13, 5, 2], [44, 13, 7, 1], [16, 15, 5, 0],
+  [-2, -12, 4, 2], [52, 3, 6.5, 1], [12, -16, 5.5, 0], [34, 16, 8, 2],
 ];
 
 const Scenery = () => {
-  const material = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: "#d7d2c6", roughness: 0.95, metalness: 0 }),
+  const body = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#cdc7ba", roughness: 0.9, metalness: 0.05 }),
+    []
+  );
+  const dark = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#b3ada0", roughness: 0.8, metalness: 0.12 }),
     []
   );
   return (
     <group>
-      {SCENERY.map(([x, z, h], i) => (
-        <mesh key={i} material={material} position={[x, h / 2, z]}>
-          <boxGeometry args={[1.1, h, 1.1]} />
-        </mesh>
-      ))}
+      {SCENERY.map(([x, z, h, kind], i) => {
+        const accent = kind === 2 ? BLUE : ORANGE;
+        return (
+          <group key={i} position={[x, 0, z]}>
+            <mesh material={i % 2 ? dark : body} position={[0, h / 2, 0]}>
+              <boxGeometry args={[1.2, h, 1.2]} />
+            </mesh>
+            {kind > 0 && (
+              <>
+                <mesh position={[0, h + 0.2, 0]}>
+                  <boxGeometry args={[0.36, 0.36, 0.36]} />
+                  <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={2.2} />
+                </mesh>
+                <mesh position={[0, h * 0.5, 0.61]}>
+                  <planeGeometry args={[0.12, h * 0.82]} />
+                  <meshBasicMaterial color={accent} transparent opacity={0.55} />
+                </mesh>
+              </>
+            )}
+          </group>
+        );
+      })}
     </group>
   );
 };
@@ -421,11 +511,6 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
   );
   const look = useRef(new THREE.Vector3(2, 1.3, 0));
   const camPos = useRef(new THREE.Vector3(-7, 3.4, 1.6));
-  const anchors = useMemo(
-    () => WAYPOINTS.map((w) => new THREE.Vector3(...panelAnchor(w.t))),
-    []
-  );
-  const projV = useRef(new THREE.Vector3());
 
   useFrame(({ camera }, dtRaw) => {
     const dt = Math.min(Math.max(dtRaw, 1e-4), 0.05); // never 0 — speed = Δ/dt below
@@ -470,14 +555,14 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
 
     const e = reduced ? 0 : energy.current;
     const phase = phaseAcc.current;
-    const swing = Math.sin(phase) * 0.5 * e;
-    const bob = Math.abs(Math.sin(phase)) * 0.08 * e;
+    const swing = Math.sin(phase) * 0.42 * e;
+    const bob = Math.abs(Math.sin(phase)) * 0.07 * e;
     const idleBob = reduced ? 0 : Math.sin(performance.now() / 800) * 0.015;
 
     if (tars.current) {
       tars.current.position.set(pose.x, bob + idleBob, pose.z);
       tars.current.rotation.y = pose.heading + spin.current;
-      tars.current.rotation.z = Math.sin(phase) * 0.035 * e;
+      tars.current.rotation.z = Math.sin(phase) * 0.028 * e;
     }
     if (outerL.current) outerL.current.rotation.x = swing;
     if (outerR.current) outerR.current.rotation.x = -swing;
@@ -489,47 +574,36 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
       shadow.current.scale.set(s, s, s);
     }
 
-    // chase camera: behind, above, offset so TARS sits right of frame center
+    // how "parked at a stop" we are: 0 while driving, 1 at a waypoint
+    let stop = 0;
+    if (worldState.mode !== "teleop") {
+      for (const wp of WAYPOINTS) {
+        stop = Math.max(stop, 1 - Math.min(1, Math.abs(worldState.t - wp.t) / 0.055));
+      }
+      stop = stop * stop * (3 - 2 * stop);
+    }
+    const isPhone = window.innerWidth < 768;
+    const wide = isPhone ? 1.5 : 0;
+
+    // chase camera: behind & above, TARS held right of frame so the board (left)
+    // stays clear; at a stop we ease back and lift to compose TARS + board
     const dir = new THREE.Vector3(Math.sin(pose.heading), 0, Math.cos(pose.heading));
-    const side = new THREE.Vector3(dir.z, 0, -dir.x); // TARS appears right of center
-    const wide = window.innerWidth < 768 ? 1.5 : 0; // pull back a bit on phones
+    const side = new THREE.Vector3(dir.z, 0, -dir.x); // +side → TARS sits right of center
+    const back = 6.4 + wide + stop * 3.4;
+    const up = 3.1 + wide * 0.4 + stop * 1.7;
+    const sideOff = (isPhone ? 1.4 : 2.7) + stop * (isPhone ? 0.2 : 1.2);
     const target = new THREE.Vector3(pose.x, 0, pose.z)
-      .addScaledVector(dir, -6.4 - wide)
-      .addScaledVector(side, 2.6)
-      .add(new THREE.Vector3(0, 3.1 + wide * 0.4, 0));
+      .addScaledVector(dir, -back)
+      .addScaledVector(side, sideOff)
+      .add(new THREE.Vector3(0, up, 0));
     camPos.current.lerp(target, 1 - Math.exp(-3 * dt));
     camera.position.copy(camPos.current);
 
-    const lookTarget = new THREE.Vector3(pose.x, 1.35, pose.z)
+    const lookTarget = new THREE.Vector3(pose.x, 1.35 + stop * 0.2, pose.z)
       .addScaledVector(dir, 2.2)
-      .addScaledVector(side, 1.0);
+      .addScaledVector(side, 1.0 + stop * 0.4);
     look.current.lerp(lookTarget, 1 - Math.exp(-3 * dt));
     camera.lookAt(look.current);
-
-    // project each waypoint's side-anchor to screen px so the DOM banner can
-    // park there — rising as TARS nears, sinking as it passes
-    camera.updateMatrixWorld();
-    camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const teleop = worldState.mode === "teleop";
-    for (let i = 0; i < anchors.length; i++) {
-      const pr = worldState.panels[i];
-      projV.current.copy(anchors[i]).project(camera);
-      const behind = projV.current.z > 1;
-      const fRaw = teleop
-        ? 0
-        : THREE.MathUtils.smoothstep(
-            1 - Math.min(1, Math.abs(worldState.t - WAYPOINTS[i].t) * 5.5),
-            0,
-            1
-          );
-      const on = !behind && fRaw > 0.02;
-      pr.sx = (projV.current.x * 0.5 + 0.5) * w;
-      pr.sy = (-projV.current.y * 0.5 + 0.5) * h;
-      pr.f = on ? fRaw : 0;
-      pr.on = on;
-    }
   });
 
   return (
@@ -563,12 +637,13 @@ const TarsWorld = () => {
         camera={{ position: [-7, 3.4, 1.6], fov: 38 }}
         gl={{ antialias: true, powerPreference: "low-power" }}
       >
-        <color attach="background" args={[PAPER]} />
-        <fog attach="fog" args={[PAPER, 24, 64]} />
+        <fog attach="fog" args={[PAPER, 26, 70]} />
+        <Sky />
         <hemisphereLight args={["#fff7ec", "#9a958c", 1.05]} />
         <directionalLight position={[6, 10, 4]} intensity={1.25} />
         <directionalLight position={[-6, 4, -3]} intensity={0.4} color="#ffe1c4" />
         <pointLight position={[getPose(1).x, 4, getPose(1).z]} intensity={18} distance={16} color={ORANGE} />
+        <Dust />
 
         {/* ground + grid */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>

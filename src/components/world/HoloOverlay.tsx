@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { worldState } from "./path";
+import { WAYPOINTS } from "./path";
 import { About } from "@/components/About";
 import { Journey } from "@/components/Journey";
 import { CaseStudy } from "@/components/CaseStudy";
@@ -8,20 +8,33 @@ import { Expertise } from "@/components/Expertise";
 import { Contact } from "@/components/Contact";
 
 /**
- * Real HTML section content, parked in 3D space. The rig projects each
- * waypoint's side-anchor to a screen point every frame (worldState.panels);
- * here we translate the matching banner there and fade/raise it by proximity,
- * so each card pops up out of the ground beside TARS as it arrives and sinks
- * again as it drives on. Waypoint index 0 is home (the Hero), so we skip it.
+ * The stop "boards". As TARS drives the route (scroll), each section's real
+ * HTML rises into a lit board in a fixed, fully-visible stage on the side of
+ * the screen — the camera frames TARS beside it. Visibility is driven straight
+ * off scroll position (not a jittery 3D projection), so a board can never be
+ * cropped and only one is on stage at a time. Waypoint 0 is home (the Hero).
  */
-const PANELS: { i: number; node: React.ReactNode }[] = [
-  { i: 1, node: <About inWorld /> },
-  { i: 2, node: <Journey inWorld /> },
-  { i: 3, node: <CaseStudy inWorld /> },
-  { i: 4, node: <Projects inWorld /> },
-  { i: 5, node: <Expertise inWorld /> },
-  { i: 6, node: <Contact inWorld /> },
+type Panel = { i: number; code: string; node: React.ReactNode; dark?: boolean };
+
+const PANELS: Panel[] = [
+  { i: 1, code: "01 · MISSION", node: <About inWorld /> },
+  { i: 2, code: "02 · JOURNEY", node: <Journey inWorld /> },
+  { i: 3, code: "03 · RESEARCH", node: <CaseStudy inWorld /> },
+  { i: 4, code: "04 · SELECTED WORK", node: <Projects inWorld /> },
+  { i: 5, code: "05 · SYSTEM STACK", node: <Expertise inWorld /> },
+  { i: 6, code: "06 · GOAL", node: <Contact inWorld />, dark: true },
 ];
+
+const smoothstep = (t: number) => {
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+};
+
+// a bump peaking at the waypoint's scroll position, zero a bit before/after so
+// only one board is ever on stage (the gaps are the "driving between stops")
+const HALF = 0.082;
+const bump = (frac: number, center: number) =>
+  smoothstep(1 - Math.min(1, Math.abs(frac - center) / HALF));
 
 export const HoloOverlay = () => {
   const refs = useRef<(HTMLDivElement | null)[]>([]);
@@ -29,33 +42,23 @@ export const HoloOverlay = () => {
   useEffect(() => {
     let raf = 0;
     const tick = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const cardW = Math.min(w * 0.88, 560);
-      const marginX = cardW / 2 + 14;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const frac = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
       for (let k = 0; k < PANELS.length; k++) {
         const el = refs.current[k];
         if (!el) continue;
-        const p = worldState.panels[PANELS[k].i];
-        if (!p || p.f <= 0.02) {
+        const f = bump(frac, WAYPOINTS[PANELS[k].i].t);
+        if (f <= 0.004) {
           if (el.style.visibility !== "hidden") {
             el.style.visibility = "hidden";
             el.style.pointerEvents = "none";
           }
           continue;
         }
-        // clamp the projected point into the viewport so a card can never end
-        // up off-screen — it stays beside TARS but always fully visible
-        const sx = Math.max(marginX, Math.min(w - marginX, p.sx));
-        const sy = Math.max(h * 0.55, Math.min(h - 18, p.sy));
         el.style.visibility = "visible";
-        el.style.transform = `translate3d(${sx.toFixed(1)}px, ${sy.toFixed(1)}px, 0)`;
-        // --f lives on the anchor and is inherited by .holo-card (do NOT also
-        // set it on the card itself, or the inline value would win and pin it)
-        el.style.setProperty("--f", p.f.toFixed(3));
-        // only the front-most (fully risen) banner takes clicks
-        el.style.pointerEvents = p.f > 0.55 ? "auto" : "none";
-        el.style.zIndex = String(10 + Math.round(p.f * 9));
+        el.style.setProperty("--f", f.toFixed(3));
+        el.style.pointerEvents = f > 0.6 ? "auto" : "none";
+        el.style.zIndex = String(20 + Math.round(f * 9));
       }
       raf = requestAnimationFrame(tick);
     };
@@ -69,10 +72,16 @@ export const HoloOverlay = () => {
         <div
           key={panel.i}
           ref={(el) => (refs.current[k] = el)}
-          className="holo-anchor"
+          className={`holo-card${panel.dark ? " holo-dark" : ""}`}
           style={{ visibility: "hidden" }}
         >
-          <div className="holo-card">{panel.node}</div>
+          <div className="holo-head">
+            <span className="holo-code">{panel.code}</span>
+            <span className="holo-live">
+              <span className="holo-dot" /> projected · live
+            </span>
+          </div>
+          <div className="holo-scroll">{panel.node}</div>
         </div>
       ))}
     </div>

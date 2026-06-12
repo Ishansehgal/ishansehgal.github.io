@@ -100,9 +100,6 @@ export const OBSTACLES = [
 
 export const BOUNDS = { minX: -4, maxX: 48, minZ: -13, maxZ: 13 };
 
-/** Screen-projected state of one in-world content banner (written by the 3D rig). */
-export type PanelProjection = { sx: number; sy: number; f: number; on: boolean };
-
 /** Live state shared between the scene, the minimap and pokes. */
 export const worldState = {
   t: 0, // smoothed progress, written by the 3D rig (or minimap fallback)
@@ -112,25 +109,6 @@ export const worldState = {
   free: { x: 0, z: 0, heading: 0 },
   /** teleop command targets: linear m/s, angular rad/s (+ = left) */
   cmd: { v: 0, w: 0 },
-  /** where each waypoint's content banner should sit on screen, per frame */
-  panels: WAYPOINTS.map(() => ({ sx: 0, sy: 0, f: 0, on: false } as PanelProjection)),
-};
-
-/**
- * World-space anchor for a waypoint's content banner: lifted off the ground and
- * pushed to the side of the path (so TARS stands beside it, presenting it). The
- * lateral normal matches the camera/signpost convention used elsewhere.
- */
-export const panelAnchor = (t: number): [number, number, number] => {
-  const p = getPose(t);
-  const nx = Math.cos(p.heading); // lateral
-  const nz = -Math.sin(p.heading);
-  const dx = Math.sin(p.heading); // forward
-  const dz = Math.cos(p.heading);
-  const LAT = 3.1; // metres to the side (away from the chase camera)
-  const FWD = 0.6; // nudge ahead so TARS faces toward it
-  const HEIGHT = 2.6;
-  return [p.x - nx * LAT + dx * FWD, HEIGHT, p.z - nz * LAT + dz * FWD];
 };
 
 /** AABB collision against obstacles + map bounds, inflated by robot radius. */

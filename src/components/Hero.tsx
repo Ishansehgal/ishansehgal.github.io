@@ -22,20 +22,33 @@ export const Hero = () => {
           <div className="max-w-2xl space-y-8">
             {/* operator ID badge */}
             <div
-              className="bootline inline-flex items-center gap-4 border border-border bg-card/85 backdrop-blur p-2.5 pr-5"
+              className="bootline inline-flex items-stretch gap-4 border border-foreground/25 bg-card/90 backdrop-blur p-3 pr-6 shadow-[0_18px_40px_-24px_hsl(var(--foreground)/0.6)]"
               style={{ "--boot-delay": "40ms" } as React.CSSProperties}
             >
               <div className="corner-frame shrink-0">
                 <img
                   src={profileImg}
                   alt="Ishan Sehgal"
-                  className="w-16 h-16 md:w-[72px] md:h-[72px] object-cover grayscale contrast-105 border border-foreground/20"
+                  className="w-28 h-32 md:w-32 md:h-40 object-cover object-top grayscale contrast-[1.08] border border-foreground/20"
                 />
               </div>
-              <div className="font-mono text-[10px] md:text-[11px] leading-relaxed">
-                <div className="text-primary tracking-[0.2em]">OPERATOR · IS-01</div>
-                <div className="text-foreground text-sm font-semibold tracking-tight">Ishan Sehgal</div>
-                <div className="text-muted-foreground">Robotics · ROS2 · Amritsar / Pune, IN</div>
+              <div className="flex flex-col justify-between font-mono py-0.5">
+                <div className="text-[10px] md:text-[11px] text-primary tracking-[0.22em]">
+                  OPERATOR · IS-01
+                </div>
+                <div>
+                  <div className="font-display font-bold text-2xl md:text-3xl leading-none tracking-tight text-foreground">
+                    Ishan Sehgal
+                  </div>
+                  <div className="text-[10px] md:text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
+                    Robotics Engineer · ROS2 / Nav2
+                    <br />
+                    Amritsar / Pune, IN
+                  </div>
+                </div>
+                <div className="text-[9px] text-accent tracking-[0.2em] uppercase">
+                  status: building autonomy
+                </div>
               </div>
             </div>
 
