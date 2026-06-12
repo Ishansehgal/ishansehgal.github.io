@@ -1,71 +1,85 @@
-import { useRef, useEffect } from "react";
-import tarsGif from "../assets/one.gif";
+import { useReveal } from "@/hooks/useReveal";
+import tarsVideo from "../assets/tars.mp4";
+
+const INTERESTS = [
+  { n: "i", title: "Visual & Visual-Inertial Odometry", note: "ego-motion from cameras, validated on a hacked vacuum base" },
+  { n: "ii", title: "Socially-Aware Navigation", note: "planners that treat humans as agents, not obstacles" },
+  { n: "iii", title: "Humanoid Locomotion & Manipulation", note: "Unitree G1, OpenArm — from gait to grasp" },
+  { n: "iv", title: "Embedded Autonomy", note: "owning the full stack down to the serial bus" },
+];
 
 export const About = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = containerRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  const ref = useReveal();
 
   return (
-    <section id="about" className="py-20 md:py-32 bg-secondary/50">
-      <div ref={containerRef} className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
+    <section id="about" className="py-24 md:py-32 px-4 md:px-8 border-b border-border">
+      <div ref={ref} className="max-w-6xl mx-auto">
+        <div className="flex items-baseline gap-4 mb-12 reveal">
+          <span className="kicker text-primary">01 / mission</span>
+          <div className="flex-1 h-px bg-border reveal-line" />
+        </div>
 
-            {/* Left Column: Text Content */}
-            <div className="md:col-span-2 space-y-8">
-              <span className="text-sm font-bold tracking-widest uppercase mb-4 block reveal">About Me</span>
-              <h2 className="text-3xl md:text-5xl font-bold mb-8 reveal">
-                Fueled by curiosity and a drive to solve new problems.
-              </h2>
-              <div className="space-y-6 text-lg text-muted-foreground reveal">
-                <p>
-                  My journey in robotics is defined by a hands-on approach to both hardware and software.
-                  I don't just write code; I build systems that move, sense, and interact with the world.
-                  Whether it's fine-tuning navigation parameters for a mobile robot or architecting a robust ROS2 node,
-                  I am deeply invested in the "how" and "why" of autonomous systems.
-                </p>
-                <p>
-                  Currently, I am expanding my horizons with projects like the <strong>TARS</strong> robot, exploring advanced
-                  locomotion and interaction. I thrive in research-oriented environments where the path isn't always clear,
-                  and the solution requires innovation.
-                </p>
-                <p>
-                  I want to build technology people can rely on, and I'm looking for opportunities to bring my
-                  expertise in ROS2, navigation, and embedded systems to a team tackling meaningful challenges.
-                </p>
-              </div>
+        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-start">
+          <div className="space-y-10">
+            <h2 className="reveal font-display font-bold text-3xl md:text-5xl leading-[1.05]">
+              I don't just write robot software —{" "}
+              <em className="font-serif italic font-normal text-primary">
+                I take machines apart until I understand them
+              </em>
+              , then make them autonomous.
+            </h2>
+
+            <div className="reveal space-y-5 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
+              <p>
+                My work spans the full autonomy stack: decompiling ARM firmware with Ghidra to
+                liberate sensor data, writing custom Nav2 planners and behaviors in C++,
+                calibrating localization pipelines, and putting it all on real hardware — mobile
+                bases, a humanoid, and robots I've rebuilt from the inside out.
+              </p>
+              <p>
+                I'm drawn to research problems where the path isn't documented: when the datasheet
+                doesn't exist, you read the bytes yourself. That instinct — measure, hypothesize,
+                verify on hardware — is what I want to bring to graduate research in robotics.
+              </p>
             </div>
 
-            {/* Right Column: TARS GIF */}
-            <div className="reveal flex justify-center md:justify-end">
-              <div className="relative w-full max-w-sm">
-                <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-full"></div>
-                <img
-                  src={tarsGif}
-                  alt="TARS Robot in Action"
-                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl rounded-lg opacity-90 hover:opacity-100 transition-all duration-500 scale-110"
-                />
-              </div>
+            {/* research interests */}
+            <div className="grid sm:grid-cols-2 gap-px bg-border border border-border">
+              {INTERESTS.map((it, i) => (
+                <div
+                  key={it.n}
+                  className="reveal bg-background p-5 group hover:bg-card transition-colors"
+                  style={{ "--reveal-delay": `${i * 90}ms` } as React.CSSProperties}
+                >
+                  <div className="font-mono text-[10px] text-primary mb-2 tracking-widest uppercase">
+                    interest [{it.n}]
+                  </div>
+                  <div className="font-display-tight font-semibold text-base mb-1">{it.title}</div>
+                  <div className="font-mono text-[11px] text-muted-foreground leading-relaxed">
+                    // {it.note}
+                  </div>
+                </div>
+              ))}
             </div>
-
           </div>
+
+          {/* TARS video */}
+          <figure className="reveal lg:sticky lg:top-24" style={{ "--reveal-delay": "200ms" } as React.CSSProperties}>
+            <div className="corner-frame">
+              <video
+                src={tarsVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full border border-foreground/20 bg-secondary"
+              />
+            </div>
+            <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
+              <span>fig. 1 — TARS replica, walking gait test</span>
+              <span className="text-primary">live capture</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

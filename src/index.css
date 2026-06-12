@@ -1,95 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 100%;
+    /* field-notebook light theme: warm paper, ink, safety orange, blueprint blue */
+    --background: 42 33% 96%;
+    --foreground: 30 10% 11%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 100%;
+    --card: 40 30% 99%;
+    --card-foreground: 30 10% 11%;
 
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 30 10% 11%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 17 100% 48%;
+    --primary-foreground: 40 30% 99%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 42 20% 90%;
+    --secondary-foreground: 30 10% 11%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 42 20% 90%;
+    --muted-foreground: 30 6% 38%;
 
-    --accent: 0 0% 12%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 215 60% 38%;
+    --accent-foreground: 40 30% 99%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 0%;
+    --border: 38 14% 82%;
+    --input: 38 14% 82%;
+    --ring: 17 100% 48%;
 
-    --radius: 0.5rem;
+    --blueprint: 215 60% 38%;
+    --ink: 30 10% 11%;
+
+    --radius: 0rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-foreground font-['Space_Grotesk'] antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
     overflow-x: hidden;
+    font-feature-settings: "ss01";
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-['Syne'] font-bold;
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
   }
 }
 
 @layer utilities {
-  .clip-path-slant {
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+
+  /* ----- typography helpers ----- */
+  .font-display {
+    font-family: "Archivo", sans-serif;
+    font-stretch: 115%;
+    letter-spacing: -0.03em;
+  }
+
+  .font-display-tight {
+    font-family: "Archivo", sans-serif;
+    font-stretch: 105%;
+    letter-spacing: -0.02em;
+  }
+
+  .kicker {
+    @apply font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground;
+  }
+
+  /* ----- paper / blueprint textures ----- */
+  .bg-gridpaper {
+    background-image:
+      linear-gradient(hsl(var(--blueprint) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--blueprint) / 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-gridpaper-fine {
+    background-image:
+      linear-gradient(hsl(var(--blueprint) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--blueprint) / 0.05) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .edge-fade {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  }
+
+  /* corner brackets, like a sensor calibration target */
+  .corner-frame {
+    position: relative;
+  }
+
+  .corner-frame::before,
+  .corner-frame::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: hsl(var(--foreground));
+    border-style: solid;
+    z-index: 2;
+  }
+
+  .corner-frame::before {
+    top: -2px;
+    left: -2px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .corner-frame::after {
+    bottom: -2px;
+    right: -2px;
+    border-width: 0 2px 2px 0;
   }
 }
 
-/* Background Animation */
-@keyframes gridScroll {
-  0% {
-    background-position: 0% 0%;
-  }
-
-  100% {
-    background-position: 0% 100%;
-  }
-}
-
-.bg-wireframe {
-  background-image: url('/src/assets/robotic_wireframe_world.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.3;
-  /* Simple parallax-like feel or just static if image implies depth */
-}
-
-
-/* Reveal Animations */
+/* ===== reveal-on-scroll system ===== */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+  transform: translateY(26px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
 .reveal.active {
@@ -97,7 +136,136 @@
   transform: translateY(0);
 }
 
-/* Footer Fix */
-footer {
-  padding-bottom: 2rem;
+.reveal-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-line.active {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal,
+  .reveal-line {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== boot log ===== */
+.bootline {
+  opacity: 0;
+  animation: bootline-in 0.05s steps(1) forwards;
+  animation-delay: var(--boot-delay, 0ms);
+}
+
+@keyframes bootline-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.cursor-blink::after {
+  content: "▍";
+  color: hsl(var(--primary));
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ===== lidar sweep ornament ===== */
+.lidar {
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--foreground) / 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.lidar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg,
+      hsl(var(--primary) / 0.55),
+      hsl(var(--primary) / 0.12) 60deg,
+      transparent 90deg);
+  animation: lidar-sweep 4s linear infinite;
+}
+
+.lidar::after {
+  content: "";
+  position: absolute;
+  inset: 26%;
+  border-radius: 9999px;
+  border: 1px dashed hsl(var(--foreground) / 0.25);
+}
+
+@keyframes lidar-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== topic ticker marquee ===== */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .marquee,
+  .lidar::before {
+    animation: none;
+  }
+}
+
+/* ===== heartbeat pulse (25 ms easter egg, slowed for humans) ===== */
+.pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px hsl(var(--primary) / 0);
+  }
+}
+
+/* ===== drawn path for mission rail ===== */
+.rail-path {
+  stroke-dasharray: 6 6;
+}
+
+/* hover lift for cards */
+.card-lift {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 6px 6px 0 0 hsl(var(--foreground));
+  border-color: hsl(var(--foreground));
 }

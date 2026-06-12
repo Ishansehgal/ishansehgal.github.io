@@ -13,7 +13,14 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Archivo", "sans-serif"],
+        mono: ["IBM Plex Mono", "monospace"],
+        serif: ["Instrument Serif", "serif"],
+      },
       colors: {
+        blueprint: "hsl(var(--blueprint))",
+        ink: "hsl(var(--ink))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

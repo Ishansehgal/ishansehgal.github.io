@@ -1,99 +1,140 @@
-import { useRef, useEffect } from "react";
-import roboCar from "../assets/robocar_sketch.png";
 import profileImg from "../assets/profile.jpg";
 
+const BOOT_LINES = [
+  { delay: 100, text: "$ ros2 launch ishan_sehgal portfolio.launch.py" },
+  { delay: 320, prefix: "[INFO] [navigation] ", text: "lifecycle: configuring → active" },
+  { delay: 520, prefix: "[INFO] [slam]       ", text: "map → odom transform locked" },
+  { delay: 720, prefix: "[INFO] [perception] ", text: "/scan publishing @ 10 Hz" },
+  { delay: 920, prefix: "[INFO] [portfolio]  ", text: "all systems nominal — scroll to begin" },
+];
+
+const TOPICS = [
+  "/cmd_vel", "/scan", "/tf", "/odom", "/imu/data", "/map",
+  "/goal_pose", "/joint_states", "/camera/image_raw", "/battery_state",
+  "/global_costmap", "/plan", "/behavior_tree_log", "/diagnostics",
+];
 
 export const Hero = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = containerRef.current?.querySelectorAll(".reveal");
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Moving Background Animation */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] flex items-end pb-10 z-0">
-        <img
-          src={roboCar}
-          alt="Robocar Sketch"
-          className="w-64 h-auto animate-move-bot grayscale invert"
-        />
-      </div>
+    <section id="home" className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* blueprint grid backdrop */}
+      <div className="absolute inset-0 bg-gridpaper edge-fade pointer-events-none" />
 
-      <div ref={containerRef} className="container mx-auto px-4 relative z-10 text-center md:text-left">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      {/* lidar ornament */}
+      <div className="absolute -right-24 -top-24 w-72 h-72 md:w-96 md:h-96 lidar opacity-60 pointer-events-none" />
 
-          <div className="order-2 md:order-1 space-y-8">
-            <div className="reveal space-y-4">
-              <p className="text-lg md:text-xl font-medium tracking-wide text-primary/80">
-                HELLO, I AM
+      <div className="relative z-10 flex-1 flex items-center pt-24 pb-12 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-[1.5fr_1fr] gap-12 lg:gap-16 items-center">
+          <div className="space-y-8">
+            {/* boot log */}
+            <div className="font-mono text-[11px] md:text-xs leading-relaxed text-muted-foreground border border-border bg-card/70 backdrop-blur px-4 py-3 max-w-xl">
+              {BOOT_LINES.map((line, i) => (
+                <div
+                  key={i}
+                  className={`bootline ${i === BOOT_LINES.length - 1 ? "cursor-blink" : ""}`}
+                  style={{ "--boot-delay": `${line.delay}ms` } as React.CSSProperties}
+                >
+                  {line.prefix && <span className="text-accent">{line.prefix}</span>}
+                  <span className={i === 0 ? "text-foreground" : ""}>{line.text}</span>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <p className="kicker mb-4 bootline" style={{ "--boot-delay": "1050ms" } as React.CSSProperties}>
+                Robotics Engineer · ROS2 · Autonomous Systems
               </p>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-none">
-                ISHAN
+              <h1
+                className="font-display font-black text-[clamp(3.2rem,10vw,7.5rem)] leading-[0.9] uppercase bootline"
+                style={{ "--boot-delay": "1100ms" } as React.CSSProperties}
+              >
+                Ishan
                 <br />
-                SEHGAL
+                Sehgal<span className="text-primary">.</span>
               </h1>
             </div>
 
-            <div className="reveal space-y-6 max-w-xl">
-              <h2 className="text-xl md:text-2xl font-light leading-snug text-muted-foreground">
-                A <span className="font-bold text-foreground">Robotics Developer</span> engineering robust autonomous systems.
-              </h2>
-              <p className="text-base text-muted-foreground leading-relaxed">
-                Bridging the physical and digital worlds. Specialized in <strong>ROS2 Control</strong>, <strong>Behavior Trees</strong>, and <strong>Navigation Stacks</strong>.
-                Tackling complex kinematic challenges to bring hardware to life.
+            <div className="bootline space-y-6 max-w-xl" style={{ "--boot-delay": "1250ms" } as React.CSSProperties}>
+              <p className="text-lg md:text-xl leading-relaxed text-muted-foreground">
+                I build autonomous systems that survive contact with the real world —{" "}
+                <span className="text-foreground font-medium">
+                  from decompiled firmware on a serial bus to navigation stacks on humanoids
+                </span>
+                . Currently shipping Nav2-based autonomy at RigBetel Labs; previously research
+                intern at e-Yantra, IIT Bombay.
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-4 justify-center md:justify-start">
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://github.com/Ishansehgal"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-6 py-3 bg-foreground text-background font-mono text-xs uppercase tracking-[0.2em] hover:bg-primary transition-colors"
+                >
+                  GitHub ↗
+                </a>
                 <a
                   href="https://www.linkedin.com/in/sehgalishan/"
                   target="_blank"
                   rel="noreferrer"
-                  className="px-8 py-3 bg-white text-black text-sm font-bold hover:opacity-90 transition-opacity tracking-widest"
+                  className="px-6 py-3 border border-foreground font-mono text-xs uppercase tracking-[0.2em] hover:bg-foreground hover:text-background transition-colors"
                 >
-                  LINKEDIN
+                  LinkedIn ↗
                 </a>
                 <a
                   href="/Ishan_Sehgal_r.pdf"
                   target="_blank"
                   rel="noreferrer"
-                  className="px-8 py-3 border border-white/20 text-white text-sm font-bold hover:bg-white hover:text-black transition-all tracking-widest"
+                  className="px-6 py-3 border border-primary text-primary font-mono text-xs uppercase tracking-[0.2em] hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
-                  RESUME
+                  Resume
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="order-1 md:order-2 flex justify-center md:justify-end reveal">
-            <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <div className="absolute inset-0 border-2 border-white/20 rounded-full animate-pulse"></div>
-              <div className="absolute inset-4 border border-white/10 rounded-full"></div>
-              <img
-                src={profileImg}
-                alt="Ishan Sehgal"
-                className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700 border-4 border-black shadow-[0_0_30px_rgba(255,255,255,0.1)]"
-              />
-            </div>
+          {/* portrait as calibration target with body-frame axes */}
+          <div className="bootline hidden lg:block" style={{ "--boot-delay": "1400ms" } as React.CSSProperties}>
+            <figure className="relative max-w-sm ml-auto">
+              <div className="corner-frame">
+                <img
+                  src={profileImg}
+                  alt="Ishan Sehgal"
+                  className="w-full aspect-[4/5] object-cover grayscale contrast-105 hover:grayscale-0 transition-all duration-700 border border-foreground/20"
+                />
+                {/* coordinate frame overlay: x forward (orange), y left (blue) — REP-103 */}
+                <svg className="absolute bottom-4 left-4 w-24 h-24 pointer-events-none" viewBox="0 0 100 100">
+                  <line x1="20" y1="80" x2="85" y2="80" stroke="hsl(17 100% 48%)" strokeWidth="2.5" />
+                  <polygon points="85,76 95,80 85,84" fill="hsl(17 100% 48%)" />
+                  <line x1="20" y1="80" x2="20" y2="15" stroke="hsl(215 60% 38%)" strokeWidth="2.5" />
+                  <polygon points="16,15 20,5 24,15" fill="hsl(215 60% 38%)" />
+                  <circle cx="20" cy="80" r="4" fill="hsl(30 10% 11%)" />
+                </svg>
+              </div>
+              <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
+                <span>fig. 0 — operator, base_link</span>
+                <span className="text-primary">x fwd · z up</span>
+              </figcaption>
+            </figure>
           </div>
-
         </div>
       </div>
-    </section >
+
+      {/* topic ticker */}
+      <div className="relative z-10 border-y border-border bg-card/60 backdrop-blur overflow-hidden py-2.5">
+        <div className="marquee font-mono text-[11px] tracking-widest text-muted-foreground">
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex shrink-0">
+              {TOPICS.map((t) => (
+                <span key={`${dup}-${t}`} className="mx-5 flex items-center gap-5">
+                  <span className="hover:text-primary transition-colors">{t}</span>
+                  <span className="text-primary/50">●</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
