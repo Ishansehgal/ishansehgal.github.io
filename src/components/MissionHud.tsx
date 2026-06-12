@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const WAYPOINTS = [
   { id: "home", label: "boot" },
   { id: "about", label: "mission" },
-  { id: "journey", label: "tf_tree" },
+  { id: "journey", label: "journey" },
   { id: "research", label: "research" },
   { id: "projects", label: "projects" },
   { id: "expertise", label: "stack" },

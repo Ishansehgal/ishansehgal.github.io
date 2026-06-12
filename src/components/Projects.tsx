@@ -86,9 +86,9 @@ export const Projects = () => {
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
           <h2 className="reveal font-display font-black text-4xl md:text-5xl uppercase leading-[0.95]">
-            Built, shipped,
+            What I've
             <br />
-            <span className="text-primary">field-tested</span>
+            <span className="text-primary">built</span>
           </h2>
           <a
             href="https://github.com/Ishansehgal"

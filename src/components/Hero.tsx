@@ -56,12 +56,12 @@ export const Hero = () => {
 
             <div className="bootline space-y-6 max-w-xl" style={{ "--boot-delay": "1250ms" } as React.CSSProperties}>
               <p className="text-lg md:text-xl leading-relaxed text-muted-foreground">
-                I build autonomous systems that survive contact with the real world —{" "}
+                I work across the autonomy stack:{" "}
                 <span className="text-foreground font-medium">
-                  from decompiled firmware on a serial bus to navigation stacks on humanoids
+                  custom Nav2 planners and behaviors in C++, SLAM and localization pipelines, and
+                  firmware-level reverse engineering when the hardware is undocumented
                 </span>
-                . Currently shipping Nav2-based autonomy at RigBetel Labs; previously research
-                intern at e-Yantra, IIT Bombay.
+                . Robotics developer at RigBetel Labs; e-Yantra (IIT Bombay) research intern, 2024.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -112,7 +112,7 @@ export const Hero = () => {
                 </svg>
               </div>
               <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
-                <span>fig. 0 — operator, base_link</span>
+                <span>fig. 0 — operator</span>
                 <span className="text-primary">x fwd · z up</span>
               </figcaption>
             </figure>

@@ -22,11 +22,11 @@ export const About = () => {
         <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-start">
           <div className="space-y-10">
             <h2 className="reveal font-display font-bold text-3xl md:text-5xl leading-[1.05]">
-              I don't just write robot software —{" "}
+              Robots make sense to me at every layer —{" "}
               <em className="font-serif italic font-normal text-primary">
-                I take machines apart until I understand them
-              </em>
-              , then make them autonomous.
+                serial bus, firmware, middleware, planner
+              </em>{" "}
+              — and I build autonomy across all of them.
             </h2>
 
             <div className="reveal space-y-5 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>

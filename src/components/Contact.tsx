@@ -54,9 +54,7 @@ export const Contact = () => {
 
         <div className="mt-20 pt-8 border-t border-background/20 flex flex-col md:flex-row justify-between gap-3 font-mono text-[10px] uppercase tracking-widest text-background/50">
           <span>© {new Date().getFullYear()} Ishan Sehgal — Amritsar / Pune, IN</span>
-          <span>
-            built with React + Vite · no node left <span className="text-primary">unconfigured</span>
-          </span>
+          <span>built with React + Vite · source on GitHub</span>
         </div>
       </div>
     </section>

@@ -4,27 +4,27 @@ const STACK = [
   {
     category: "Navigation & Control",
     items: ["Nav2 (custom planners, controllers, BT nodes)", "ros2_control", "Behavior Trees", "Path planning & tracking", "Lifecycle nodes"],
-    note: "a costmap is just an opinionated occupancy grid",
+    note: "plugin-based planner & controller servers, orchestrated by behavior trees",
   },
   {
     category: "Localization & SLAM",
     items: ["Beluga MCL / AMCL", "slam_toolbox", "RTAB-Map", "Sensor fusion (EKF)", "Visual odometry", "Odometry calibration"],
-    note: "every estimate worth trusting ships with a covariance",
+    note: "particle-filter and graph-based methods, fused with EKF wheel/IMU odometry",
   },
   {
     category: "Simulation & Modeling",
     items: ["Gazebo / Ignition", "OpenArm simulation", "MoveIt 2", "URDF / Xacro", "TF2 & REP-105 frames", "RViz"],
-    note: "sim-to-real starts with an honest URDF",
+    note: "URDF/Xacro modeling, physics simulation, motion planning with MoveIt 2",
   },
   {
     category: "Embedded & Reverse Engineering",
     items: ["Ghidra static analysis", "STM32 serial protocols", "C / C++ on ARM Linux", "UART / USB buses", "Firmware recon", "Custom drivers"],
-    note: "when there's no datasheet, the bytes are the datasheet",
+    note: "static analysis of ARM binaries; custom serial-protocol drivers in C",
   },
   {
     category: "Infrastructure",
     items: ["Docker", "colcon / CMake", "CI/CD for ROS", "Linux (Ubuntu)", "Git", "Python"],
-    note: "a build that isn't reproducible isn't science",
+    note: "containerized, reproducible ROS2 builds with colcon and CI",
   },
 ];
 
@@ -58,14 +58,6 @@ export const Expertise = () => {
             </div>
           ))}
 
-          {/* field note card filling the grid */}
-          <div className="reveal border border-dashed border-foreground/40 p-5 flex flex-col justify-center gap-3" style={{ "--reveal-delay": "270ms" } as React.CSSProperties}>
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">field note</span>
-            <p className="font-serif italic text-xl leading-snug">
-              "The robot doesn't care how elegant your architecture is. It cares whether the
-              transform arrives on time."
-            </p>
-          </div>
         </div>
       </div>
     </section>
