@@ -104,4 +104,24 @@ export const BOUNDS = { minX: -4, maxX: 48, minZ: -11, maxZ: 11 };
 export const worldState = {
   t: 0, // smoothed progress, written by the 3D rig (or minimap fallback)
   spinTarget: 0,
+  mode: "route" as "route" | "teleop",
+  /** free-drive pose, valid in teleop mode */
+  free: { x: 0, z: 0, heading: 0 },
+  /** teleop command targets: linear m/s, angular rad/s (+ = left) */
+  cmd: { v: 0, w: 0 },
+};
+
+/** AABB collision against obstacles + map bounds, inflated by robot radius. */
+export const collides = (x: number, z: number) => {
+  if (
+    x < BOUNDS.minX + 1 ||
+    x > BOUNDS.maxX - 1 ||
+    z < BOUNDS.minZ + 1 ||
+    z > BOUNDS.maxZ - 1
+  )
+    return true;
+  const r = 0.85;
+  return OBSTACLES.some(
+    (o) => Math.abs(x - o.x) < o.w / 2 + r && Math.abs(z - o.z) < o.d / 2 + r
+  );
 };

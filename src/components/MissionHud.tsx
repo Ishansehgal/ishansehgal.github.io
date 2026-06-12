@@ -23,7 +23,7 @@ export const MissionHud = () => {
       : document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-0">
+    <div className="hud-rail fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-0">
       {WAYPOINTS.map((w, i) => (
         <div key={w.id} className="flex flex-col items-center">
           {i > 0 && <div className="w-px h-7 border-l border-dashed border-foreground/30" />}

@@ -4,11 +4,14 @@ import * as THREE from "three";
 import {
   getPose,
   tracePose,
+  collides,
   WAYPOINTS,
   OBSTACLES,
   PATH_LENGTH,
   worldState,
 } from "./path";
+
+const STRIDE_K = (Math.PI * 2) / 1.15; // gait phase per metre (one stride ≈ 1.15 m)
 
 const PAPER = "#f4f1ea";
 const INK = "#211f1b";
@@ -126,7 +129,19 @@ const Waypoint = ({ t, label, side }: { t: number; label: string; side: number }
   const { camera } = useThree();
 
   useFrame(() => {
-    const f = THREE.MathUtils.smoothstep(1 - Math.min(1, Math.abs(worldState.t - t) * 7), 0, 1);
+    const f =
+      worldState.mode === "teleop"
+        ? THREE.MathUtils.smoothstep(
+            1 -
+              THREE.MathUtils.clamp(
+                (Math.hypot(worldState.free.x - pose.x, worldState.free.z - pose.z) - 3) / 6,
+                0,
+                1
+              ),
+            0,
+            1
+          )
+        : THREE.MathUtils.smoothstep(1 - Math.min(1, Math.abs(worldState.t - t) * 7), 0, 1);
     if (group.current) {
       group.current.scale.setScalar(Math.max(0.0001, f));
       group.current.position.y = (f - 1) * 1.2;
@@ -272,6 +287,8 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
 
   const energy = useRef(0);
   const spin = useRef(0);
+  const vel = useRef({ v: 0, w: 0 });
+  const phaseAcc = useRef(0);
   // debug override: ?t=0.4 freezes the route progress for visual tuning
   const forceT = useRef<number | null>(
     (() => {
@@ -284,24 +301,47 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
 
   useFrame(({ camera }, dtRaw) => {
     const dt = Math.min(Math.max(dtRaw, 1e-4), 0.05); // never 0 — speed = Δ/dt below
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const raw =
-      forceT.current ?? (max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
 
-    const prev = worldState.t;
-    worldState.t += (raw - worldState.t) * (1 - Math.exp(-4 * dt));
-    const speed = Math.abs(worldState.t - prev) / dt; // progress/s
-    energy.current = THREE.MathUtils.lerp(
-      energy.current,
-      Math.min(1, speed * 28),
-      1 - Math.exp(-6 * dt)
-    );
+    let pose: { x: number; z: number; heading: number };
+    let eTarget: number;
 
+    if (worldState.mode === "teleop") {
+      // velocity smoothing with accel limits, like a real base controller
+      const dv = THREE.MathUtils.clamp(worldState.cmd.v - vel.current.v, -2.6 * dt, 2.6 * dt);
+      const dw = THREE.MathUtils.clamp(worldState.cmd.w - vel.current.w, -5.5 * dt, 5.5 * dt);
+      vel.current.v += dv;
+      vel.current.w += dw;
+
+      const f = worldState.free;
+      f.heading += vel.current.w * dt;
+      const nx = f.x + Math.sin(f.heading) * vel.current.v * dt;
+      const nz = f.z + Math.cos(f.heading) * vel.current.v * dt;
+      if (!collides(nx, nz)) {
+        f.x = nx;
+        f.z = nz;
+      } else {
+        vel.current.v = 0; // bumper hit — stop linear motion
+      }
+      pose = { x: f.x, z: f.z, heading: f.heading };
+      phaseAcc.current += Math.abs(vel.current.v) * dt * STRIDE_K;
+      eTarget = Math.min(1, Math.abs(vel.current.v) / 1.4 + Math.abs(vel.current.w) / 3.0);
+    } else {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const raw =
+        forceT.current ?? (max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
+      const prev = worldState.t;
+      worldState.t += (raw - worldState.t) * (1 - Math.exp(-4 * dt));
+      const speed = Math.abs(worldState.t - prev) / dt; // progress/s
+      pose = getPose(worldState.t);
+      phaseAcc.current = worldState.t * PATH_LENGTH * STRIDE_K;
+      eTarget = Math.min(1, speed * 28);
+    }
+
+    energy.current = THREE.MathUtils.lerp(energy.current, eTarget, 1 - Math.exp(-6 * dt));
     spin.current += (worldState.spinTarget - spin.current) * Math.min(1, dt * 5);
 
-    const pose = getPose(worldState.t);
     const e = reduced ? 0 : energy.current;
-    const phase = (worldState.t * PATH_LENGTH * Math.PI * 2) / 1.15; // one stride ≈ 1.15 m
+    const phase = phaseAcc.current;
     const swing = Math.sin(phase) * 0.5 * e;
     const bob = Math.abs(Math.sin(phase)) * 0.08 * e;
     const idleBob = reduced ? 0 : Math.sin(performance.now() / 800) * 0.015;
