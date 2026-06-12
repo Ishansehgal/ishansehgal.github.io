@@ -1,5 +1,6 @@
 import { useReveal } from "@/hooks/useReveal";
 import tarsVideo from "../assets/tars.mp4";
+import profileImg from "../assets/profile.jpg";
 
 const INTERESTS = [
   { n: "i", title: "Visual & Visual-Inertial Odometry", note: "ego-motion from cameras, validated on a hacked vacuum base" },
@@ -12,7 +13,7 @@ export const About = () => {
   const ref = useReveal();
 
   return (
-    <section id="about" className="py-24 md:py-32 px-4 md:px-8 border-b border-border">
+    <section id="about" className="py-24 md:py-32 px-4 md:px-8 border-y border-border bg-background">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-12 reveal">
           <span className="kicker text-primary">01 / mission</span>
@@ -63,23 +64,39 @@ export const About = () => {
             </div>
           </div>
 
-          {/* TARS video */}
-          <figure className="reveal lg:sticky lg:top-24" style={{ "--reveal-delay": "200ms" } as React.CSSProperties}>
-            <div className="corner-frame">
-              <video
-                src={tarsVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full border border-foreground/20 bg-secondary"
-              />
-            </div>
-            <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
-              <span>fig. 1 — TARS replica, walking gait test</span>
-              <span className="text-primary">live capture</span>
-            </figcaption>
-          </figure>
+          {/* operator + TARS hardware */}
+          <div className="space-y-10 lg:sticky lg:top-24">
+            <figure className="reveal" style={{ "--reveal-delay": "150ms" } as React.CSSProperties}>
+              <div className="corner-frame">
+                <img
+                  src={profileImg}
+                  alt="Ishan Sehgal"
+                  className="w-full aspect-[4/5] object-cover grayscale contrast-105 hover:grayscale-0 transition-all duration-700 border border-foreground/20"
+                />
+              </div>
+              <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
+                <span>fig. 0 — operator</span>
+                <span className="text-primary">with Unitree G1</span>
+              </figcaption>
+            </figure>
+
+            <figure className="reveal" style={{ "--reveal-delay": "250ms" } as React.CSSProperties}>
+              <div className="corner-frame">
+                <video
+                  src={tarsVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full border border-foreground/20 bg-secondary"
+                />
+              </div>
+              <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex justify-between">
+                <span>fig. 1 — TARS replica, walking gait test</span>
+                <span className="text-primary">live capture</span>
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>

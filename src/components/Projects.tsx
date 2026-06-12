@@ -77,7 +77,7 @@ export const Projects = () => {
   const ref = useReveal();
 
   return (
-    <section id="projects" className="py-24 md:py-32 px-4 md:px-8 border-b border-border bg-card/40">
+    <section id="projects" className="py-24 md:py-32 px-4 md:px-8 border-y border-border bg-card">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-4 reveal">
           <span className="kicker text-primary">04 / selected work</span>

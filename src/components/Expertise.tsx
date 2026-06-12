@@ -32,7 +32,7 @@ export const Expertise = () => {
   const ref = useReveal();
 
   return (
-    <section id="expertise" className="py-24 md:py-32 px-4 md:px-8 border-b border-border">
+    <section id="expertise" className="py-24 md:py-32 px-4 md:px-8 border-y border-border bg-background">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-14 reveal">
           <span className="kicker text-primary">05 / system stack</span>

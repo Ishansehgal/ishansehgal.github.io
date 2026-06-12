@@ -38,7 +38,7 @@ export const CaseStudy = () => {
   const ref = useReveal();
 
   return (
-    <section id="research" className="py-24 md:py-32 px-4 md:px-8 border-b border-border relative overflow-hidden">
+    <section id="research" className="py-24 md:py-32 px-4 md:px-8 border-y border-border bg-background relative overflow-hidden">
       <div className="absolute inset-0 bg-gridpaper-fine edge-fade pointer-events-none" />
 
       <div ref={ref} className="max-w-6xl mx-auto relative">
