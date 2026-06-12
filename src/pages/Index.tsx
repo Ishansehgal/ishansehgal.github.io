@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from "react";
+import { useWorldPanels } from "@/hooks/useWorldPanels";
 import { Navigation } from "@/components/Navigation";
 import { MissionHud } from "@/components/MissionHud";
 import { MiniMap } from "@/components/world/MiniMap";
@@ -28,6 +29,7 @@ const WorldWindow = ({ open }: { open: boolean }) => (
 
 const Index = () => {
   const [webgl] = useState(supportsWebGL);
+  useWorldPanels();
 
   return (
     <div className="min-h-screen text-foreground">

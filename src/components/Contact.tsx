@@ -5,8 +5,8 @@ export const Contact = () => {
   const ref = useReveal();
 
   return (
-    <section id="contact" className="py-24 md:py-36 px-4 md:px-8 relative overflow-hidden bg-foreground text-background">
-      <div ref={ref} className="max-w-6xl mx-auto relative">
+    <section id="contact" className="py-24 md:py-36 px-4 md:px-8 relative overflow-hidden text-background">
+      <div ref={ref} className="wp wp-dark max-w-6xl mx-auto relative">
         <div className="reveal font-mono text-[11px] md:text-xs text-background/60 mb-10 space-y-1">
           <div>$ ros2 topic pub /ishan/inbox std_msgs/String \</div>
           <div className="pl-4">

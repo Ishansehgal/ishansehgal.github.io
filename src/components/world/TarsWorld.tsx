@@ -282,6 +282,121 @@ const TraceLine = () => {
   );
 };
 
+/* ---------- the navigable free-space corridor along the plan ---------- */
+
+const Corridor = () => {
+  const geometry = useMemo(() => {
+    const N = 240;
+    const hw = 1.7; // half-width of the drivable ribbon
+    const pos: number[] = [];
+    const idx: number[] = [];
+    for (let i = 0; i <= N; i++) {
+      const p = getPose(i / N);
+      const nx = Math.cos(p.heading); // lateral normal (matches waypoint offset convention)
+      const nz = -Math.sin(p.heading);
+      pos.push(p.x + nx * hw, 0.035, p.z + nz * hw);
+      pos.push(p.x - nx * hw, 0.035, p.z - nz * hw);
+    }
+    for (let i = 0; i < N; i++) {
+      const a = i * 2;
+      idx.push(a, a + 1, a + 2, a + 2, a + 1, a + 3);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setIndex(idx);
+    return g;
+  }, []);
+
+  return (
+    <mesh geometry={geometry}>
+      <meshBasicMaterial color={BLUE} transparent opacity={0.07} side={THREE.DoubleSide} depthWrite={false} />
+    </mesh>
+  );
+};
+
+/* ---------- projector pad + light beam under each waypoint ---------- */
+
+const Projector = ({ t }: { t: number }) => {
+  const beam = useRef<THREE.Group>(null);
+  const ring = useRef<THREE.Mesh>(null);
+  const pose = useMemo(() => getPose(t), [t]);
+  useFrame(({ clock }) => {
+    const f =
+      worldState.mode === "teleop"
+        ? THREE.MathUtils.smoothstep(
+            1 -
+              THREE.MathUtils.clamp(
+                (Math.hypot(worldState.free.x - pose.x, worldState.free.z - pose.z) - 2.5) / 6,
+                0,
+                1
+              ),
+            0,
+            1
+          )
+        : THREE.MathUtils.smoothstep(1 - Math.min(1, Math.abs(worldState.t - t) * 6), 0, 1);
+    if (beam.current) {
+      beam.current.scale.y = Math.max(0.0001, f);
+      beam.current.visible = f > 0.01;
+    }
+    if (ring.current) {
+      const s = 0.85 + f * 0.15 + Math.sin(clock.elapsedTime * 2) * 0.02 * f;
+      ring.current.scale.set(s, s, s);
+      (ring.current.material as THREE.Material).opacity = 0.25 + f * 0.45;
+    }
+  });
+
+  return (
+    <group position={[pose.x, 0, pose.z]}>
+      {/* glowing landing pad */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, 0]}>
+        <circleGeometry args={[1.25, 56]} />
+        <meshBasicMaterial color={BLUE} transparent opacity={0.1} depthWrite={false} />
+      </mesh>
+      <mesh ref={ring} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+        <ringGeometry args={[1.15, 1.32, 64]} />
+        <meshBasicMaterial color={ORANGE} transparent opacity={0.4} depthWrite={false} />
+      </mesh>
+      {/* projected light cone rising from the pad */}
+      <group ref={beam}>
+        <mesh position={[0, 2.4, 0]}>
+          <cylinderGeometry args={[1.45, 1.18, 4.8, 44, 1, true]} />
+          <meshBasicMaterial
+            color={ORANGE}
+            transparent
+            opacity={0.05}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      </group>
+    </group>
+  );
+};
+
+/* ---------- distant scenery for depth ---------- */
+
+const SCENERY: [number, number, number][] = [
+  [3, 13, 4.5], [9, -14, 6], [24, 15, 7.5], [30, -15, 5.5],
+  [38, 14, 6.5], [46, -13, 5], [44, 13, 7], [16, 15, 5],
+];
+
+const Scenery = () => {
+  const material = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#d7d2c6", roughness: 0.95, metalness: 0 }),
+    []
+  );
+  return (
+    <group>
+      {SCENERY.map(([x, z, h], i) => (
+        <mesh key={i} material={material} position={[x, h / 2, z]}>
+          <boxGeometry args={[1.1, h, 1.1]} />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
 /* ---------- the rig: scroll → pose, gait, chase camera ---------- */
 
 const Rig = ({ reduced }: { reduced: boolean }) => {
@@ -418,10 +533,11 @@ const TarsWorld = () => {
         gl={{ antialias: true, powerPreference: "low-power" }}
       >
         <color attach="background" args={[PAPER]} />
-        <fog attach="fog" args={[PAPER, 20, 58]} />
-        <hemisphereLight args={["#ffffff", "#9a958c", 1.0]} />
-        <directionalLight position={[6, 10, 4]} intensity={1.3} />
-        <directionalLight position={[-6, 4, -3]} intensity={0.35} color="#ffe4cc" />
+        <fog attach="fog" args={[PAPER, 24, 64]} />
+        <hemisphereLight args={["#fff7ec", "#9a958c", 1.05]} />
+        <directionalLight position={[6, 10, 4]} intensity={1.25} />
+        <directionalLight position={[-6, 4, -3]} intensity={0.4} color="#ffe1c4" />
+        <pointLight position={[getPose(1).x, 4, getPose(1).z]} intensity={18} distance={16} color={ORANGE} />
 
         {/* ground + grid */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
@@ -435,11 +551,16 @@ const TarsWorld = () => {
           <lineBasicMaterial attach="material" color="#b7c4d8" transparent opacity={0.35} />
         </gridHelper>
 
+        <Corridor />
         <PlanLine />
         <TraceLine />
         <Obstacles />
+        <Scenery />
         {WAYPOINTS.map((w, i) => (
           <Waypoint key={w.id} t={w.t} label={w.label} side={i % 2 === 0 ? -1 : 1} />
+        ))}
+        {WAYPOINTS.map((w) => (
+          <Projector key={`proj-${w.id}`} t={w.t} />
         ))}
         <Goal />
         <Rig reduced={reduced} />

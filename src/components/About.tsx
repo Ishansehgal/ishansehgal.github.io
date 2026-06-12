@@ -13,8 +13,8 @@ export const About = () => {
   const ref = useReveal();
 
   return (
-    <section id="about" className="py-24 md:py-32 px-4 md:px-8 border-y border-border bg-background">
-      <div ref={ref} className="max-w-6xl mx-auto">
+    <section id="about" className="py-24 md:py-32 px-4 md:px-8">
+      <div ref={ref} className="wp max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-12 reveal">
           <span className="kicker text-primary">01 / mission</span>
           <div className="flex-1 h-px bg-border reveal-line" />

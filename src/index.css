@@ -276,3 +276,54 @@
   box-shadow: 6px 6px 0 0 hsl(var(--foreground));
   border-color: hsl(var(--foreground));
 }
+
+/* ===== world panels: section content floating inside the 3D world ===== */
+/* the section is the perspective stage; .wp is the panel that tilts within it */
+main > section {
+  perspective: 1600px;
+  perspective-origin: 50% 42%;
+  background: transparent;
+}
+
+.wp {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1.5rem, 3.6vw, 3.25rem);
+  background: hsl(var(--card) / 0.84);
+  -webkit-backdrop-filter: blur(8px) saturate(108%);
+  backdrop-filter: blur(8px) saturate(108%);
+  border: 1px solid hsl(var(--border));
+  box-shadow:
+    0 1px 0 hsl(var(--card) / 0.9) inset,
+    0 30px 60px -26px hsl(var(--foreground) / 0.5),
+    0 10px 26px -20px hsl(var(--foreground) / 0.55);
+  transform-origin: center 78%;
+  transform: translateZ(var(--wp-tz, 0px)) rotateX(var(--wp-rx, 0deg));
+  will-change: transform;
+}
+
+/* projected-hologram edge: a thin lit seam along the top of the panel */
+.wp::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.85), transparent);
+}
+
+/* dark panel variant (contact) */
+.wp-dark {
+  background: hsl(30 12% 9% / 0.85);
+  border-color: hsl(0 0% 100% / 0.13);
+  box-shadow:
+    0 30px 60px -26px hsl(0 0% 0% / 0.6),
+    0 10px 26px -20px hsl(0 0% 0% / 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wp {
+    transform: none;
+  }
+}

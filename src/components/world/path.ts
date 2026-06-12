@@ -98,7 +98,7 @@ export const OBSTACLES = [
   { x: 43, z: 6, w: 2, d: 2, h: 2.8 },
 ];
 
-export const BOUNDS = { minX: -4, maxX: 48, minZ: -11, maxZ: 11 };
+export const BOUNDS = { minX: -4, maxX: 48, minZ: -13, maxZ: 13 };
 
 /** Live state shared between the scene, the minimap and pokes. */
 export const worldState = {
