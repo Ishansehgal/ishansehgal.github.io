@@ -1,3 +1,5 @@
+import profileImg from "../assets/profile.jpg";
+
 const BOOT_LINES = [
   { delay: 100, text: "$ ros2 launch ishan_sehgal portfolio.launch.py" },
   { delay: 320, prefix: "[INFO] [navigation] ", text: "global plan computed — 7 waypoints" },
@@ -18,6 +20,25 @@ export const Hero = () => {
       <div className="relative z-10 flex-1 flex items-center pt-24 pb-12 px-4 md:px-8">
         <div className="max-w-6xl mx-auto w-full">
           <div className="max-w-2xl space-y-8">
+            {/* operator ID badge */}
+            <div
+              className="bootline inline-flex items-center gap-4 border border-border bg-card/85 backdrop-blur p-2.5 pr-5"
+              style={{ "--boot-delay": "40ms" } as React.CSSProperties}
+            >
+              <div className="corner-frame shrink-0">
+                <img
+                  src={profileImg}
+                  alt="Ishan Sehgal"
+                  className="w-16 h-16 md:w-[72px] md:h-[72px] object-cover grayscale contrast-105 border border-foreground/20"
+                />
+              </div>
+              <div className="font-mono text-[10px] md:text-[11px] leading-relaxed">
+                <div className="text-primary tracking-[0.2em]">OPERATOR · IS-01</div>
+                <div className="text-foreground text-sm font-semibold tracking-tight">Ishan Sehgal</div>
+                <div className="text-muted-foreground">Robotics · ROS2 · Amritsar / Pune, IN</div>
+              </div>
+            </div>
+
             {/* boot log */}
             <div className="font-mono text-[11px] md:text-xs leading-relaxed text-muted-foreground border border-border bg-card/85 backdrop-blur px-4 py-3 max-w-xl">
               {BOOT_LINES.map((line, i) => (

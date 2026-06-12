@@ -524,8 +524,7 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
             0,
             1
           );
-      const on =
-        !behind && fRaw > 0.02 && projV.current.x > -1.35 && projV.current.x < 1.35;
+      const on = !behind && fRaw > 0.02;
       pr.sx = (projV.current.x * 0.5 + 0.5) * w;
       pr.sy = (-projV.current.y * 0.5 + 0.5) * h;
       pr.f = on ? fRaw : 0;

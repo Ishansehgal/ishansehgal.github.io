@@ -348,6 +348,11 @@ main > section {
     translateY(calc((1 - var(--f, 0)) * 54px))
     scale(calc(0.95 + var(--f, 0) * 0.05));
   opacity: var(--f, 0);
+  /* projector-light halo: reads as a board lit from the beam below */
+  box-shadow:
+    0 0 0 1px hsl(var(--primary) / 0.16),
+    0 -12px 70px -26px hsl(var(--primary) / 0.55),
+    0 44px 90px -44px hsl(var(--foreground) / 0.55);
 }
 
 .holo-card::-webkit-scrollbar {

@@ -29,6 +29,10 @@ export const HoloOverlay = () => {
   useEffect(() => {
     let raf = 0;
     const tick = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const cardW = Math.min(w * 0.88, 560);
+      const marginX = cardW / 2 + 14;
       for (let k = 0; k < PANELS.length; k++) {
         const el = refs.current[k];
         if (!el) continue;
@@ -40,11 +44,17 @@ export const HoloOverlay = () => {
           }
           continue;
         }
+        // clamp the projected point into the viewport so a card can never end
+        // up off-screen — it stays beside TARS but always fully visible
+        const sx = Math.max(marginX, Math.min(w - marginX, p.sx));
+        const sy = Math.max(h * 0.55, Math.min(h - 18, p.sy));
         el.style.visibility = "visible";
-        el.style.transform = `translate3d(${p.sx.toFixed(1)}px, ${p.sy.toFixed(1)}px, 0)`;
+        el.style.transform = `translate3d(${sx.toFixed(1)}px, ${sy.toFixed(1)}px, 0)`;
+        // --f lives on the anchor and is inherited by .holo-card (do NOT also
+        // set it on the card itself, or the inline value would win and pin it)
         el.style.setProperty("--f", p.f.toFixed(3));
-        // only let the front-most (fully risen) banner take clicks
-        el.style.pointerEvents = p.f > 0.6 ? "auto" : "none";
+        // only the front-most (fully risen) banner takes clicks
+        el.style.pointerEvents = p.f > 0.55 ? "auto" : "none";
         el.style.zIndex = String(10 + Math.round(p.f * 9));
       }
       raf = requestAnimationFrame(tick);
@@ -62,9 +72,7 @@ export const HoloOverlay = () => {
           className="holo-anchor"
           style={{ visibility: "hidden" }}
         >
-          <div className="holo-card" style={{ ["--f" as string]: 0 }}>
-            {panel.node}
-          </div>
+          <div className="holo-card">{panel.node}</div>
         </div>
       ))}
     </div>
