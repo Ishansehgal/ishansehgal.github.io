@@ -5,6 +5,7 @@ import {
   getPose,
   tracePose,
   collides,
+  panelAnchor,
   WAYPOINTS,
   OBSTACLES,
   PATH_LENGTH,
@@ -420,6 +421,11 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
   );
   const look = useRef(new THREE.Vector3(2, 1.3, 0));
   const camPos = useRef(new THREE.Vector3(-7, 3.4, 1.6));
+  const anchors = useMemo(
+    () => WAYPOINTS.map((w) => new THREE.Vector3(...panelAnchor(w.t))),
+    []
+  );
+  const projV = useRef(new THREE.Vector3());
 
   useFrame(({ camera }, dtRaw) => {
     const dt = Math.min(Math.max(dtRaw, 1e-4), 0.05); // never 0 — speed = Δ/dt below
@@ -499,6 +505,32 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
       .addScaledVector(side, 1.0);
     look.current.lerp(lookTarget, 1 - Math.exp(-3 * dt));
     camera.lookAt(look.current);
+
+    // project each waypoint's side-anchor to screen px so the DOM banner can
+    // park there — rising as TARS nears, sinking as it passes
+    camera.updateMatrixWorld();
+    camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const teleop = worldState.mode === "teleop";
+    for (let i = 0; i < anchors.length; i++) {
+      const pr = worldState.panels[i];
+      projV.current.copy(anchors[i]).project(camera);
+      const behind = projV.current.z > 1;
+      const fRaw = teleop
+        ? 0
+        : THREE.MathUtils.smoothstep(
+            1 - Math.min(1, Math.abs(worldState.t - WAYPOINTS[i].t) * 5.5),
+            0,
+            1
+          );
+      const on =
+        !behind && fRaw > 0.02 && projV.current.x > -1.35 && projV.current.x < 1.35;
+      pr.sx = (projV.current.x * 0.5 + 0.5) * w;
+      pr.sy = (-projV.current.y * 0.5 + 0.5) * h;
+      pr.f = on ? fRaw : 0;
+      pr.on = on;
+    }
   });
 
   return (

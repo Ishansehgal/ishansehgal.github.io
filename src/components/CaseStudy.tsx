@@ -34,11 +34,10 @@ const STEPS = [
   },
 ];
 
-export const CaseStudy = () => {
+export const CaseStudy = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal();
 
-  return (
-    <section id="research" className="py-24 md:py-32 px-4 md:px-8 relative overflow-hidden">
+  const body = (
       <div ref={ref} className="wp max-w-6xl mx-auto relative">
         <div className="absolute inset-0 bg-gridpaper-fine pointer-events-none opacity-60" />
         <div className="flex items-baseline gap-4 mb-4 reveal">
@@ -128,6 +127,11 @@ export const CaseStudy = () => {
           ))}
         </div>
       </div>
-    </section>
+  );
+
+  return inWorld ? (
+    <div className="relative overflow-hidden">{body}</div>
+  ) : (
+    <section id="research" className="py-24 md:py-32 px-4 md:px-8 relative overflow-hidden">{body}</section>
   );
 };

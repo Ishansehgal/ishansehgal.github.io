@@ -32,7 +32,7 @@ const NODES = [
   },
 ];
 
-export const Journey = () => {
+export const Journey = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal<HTMLDivElement>();
   const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
@@ -53,8 +53,7 @@ export const Journey = () => {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section id="journey" className="py-24 md:py-32 px-4 md:px-8">
+  const body = (
       <div ref={ref} className="wp max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-14 reveal">
           <span className="kicker text-primary">02 / journey</span>
@@ -97,6 +96,11 @@ export const Journey = () => {
           </div>
         </div>
       </div>
-    </section>
+  );
+
+  return inWorld ? (
+    <div className="relative">{body}</div>
+  ) : (
+    <section id="journey" className="py-24 md:py-32 px-4 md:px-8">{body}</section>
   );
 };

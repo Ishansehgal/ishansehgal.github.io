@@ -277,32 +277,26 @@
   border-color: hsl(var(--foreground));
 }
 
-/* ===== world panels: section content floating inside the 3D world ===== */
-/* the section is the perspective stage; .wp is the panel that tilts within it */
+/* ===== world panels: section content as banners floating in the 3D world ===== */
 main > section {
-  perspective: 1600px;
-  perspective-origin: 50% 42%;
   background: transparent;
 }
 
 .wp {
   position: relative;
   z-index: 1;
-  padding: clamp(1.5rem, 3.6vw, 3.25rem);
-  background: hsl(var(--card) / 0.84);
-  -webkit-backdrop-filter: blur(8px) saturate(108%);
-  backdrop-filter: blur(8px) saturate(108%);
+  padding: clamp(1.4rem, 3.4vw, 3rem);
+  background: hsl(var(--card) / 0.9);
+  -webkit-backdrop-filter: blur(9px) saturate(108%);
+  backdrop-filter: blur(9px) saturate(108%);
   border: 1px solid hsl(var(--border));
   box-shadow:
     0 1px 0 hsl(var(--card) / 0.9) inset,
     0 30px 60px -26px hsl(var(--foreground) / 0.5),
     0 10px 26px -20px hsl(var(--foreground) / 0.55);
-  transform-origin: center 78%;
-  transform: translateZ(var(--wp-tz, 0px)) rotateX(var(--wp-rx, 0deg));
-  will-change: transform;
 }
 
-/* projected-hologram edge: a thin lit seam along the top of the panel */
+/* projected-hologram seam along the top edge of the panel */
 .wp::before {
   content: "";
   position: absolute;
@@ -315,15 +309,64 @@ main > section {
 
 /* dark panel variant (contact) */
 .wp-dark {
-  background: hsl(30 12% 9% / 0.85);
+  background: hsl(30 12% 9% / 0.9);
   border-color: hsl(0 0% 100% / 0.13);
   box-shadow:
     0 30px 60px -26px hsl(0 0% 0% / 0.6),
     0 10px 26px -20px hsl(0 0% 0% / 0.6);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wp {
-    transform: none;
-  }
+/* the fixed overlay that hosts every in-world banner */
+.holo-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* JS parks this at the waypoint's projected screen point each frame */
+.holo-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* the banner itself: sits on top of the anchor point and rises into place */
+.holo-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: min(88vw, 560px);
+  max-height: 82vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform-origin: 50% 100%;
+  transform:
+    translate(-50%, -100%)
+    translateY(calc((1 - var(--f, 0)) * 54px))
+    scale(calc(0.95 + var(--f, 0) * 0.05));
+  opacity: var(--f, 0);
+}
+
+.holo-card::-webkit-scrollbar {
+  width: 6px;
+}
+.holo-card::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground) / 0.25);
+}
+
+/* content inside a banner is shown immediately — proximity drives it, not scroll */
+.holo-card .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+.holo-card .reveal-line {
+  transform: scaleX(1) !important;
+}
+
+.teleop-on .holo-layer {
+  visibility: hidden;
 }

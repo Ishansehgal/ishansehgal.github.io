@@ -28,11 +28,10 @@ const STACK = [
   },
 ];
 
-export const Expertise = () => {
+export const Expertise = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal();
 
-  return (
-    <section id="expertise" className="py-24 md:py-32 px-4 md:px-8">
+  const body = (
       <div ref={ref} className="wp max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-14 reveal">
           <span className="kicker text-primary">05 / system stack</span>
@@ -60,6 +59,11 @@ export const Expertise = () => {
 
         </div>
       </div>
-    </section>
+  );
+
+  return inWorld ? (
+    <div className="relative">{body}</div>
+  ) : (
+    <section id="expertise" className="py-24 md:py-32 px-4 md:px-8">{body}</section>
   );
 };

@@ -9,11 +9,10 @@ const INTERESTS = [
   { n: "iv", title: "Embedded Autonomy", note: "getting autonomy to run on the robot itself, down to the firmware" },
 ];
 
-export const About = () => {
+export const About = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal();
 
-  return (
-    <section id="about" className="py-24 md:py-32 px-4 md:px-8">
+  const body = (
       <div ref={ref} className="wp max-w-6xl mx-auto">
         <div className="flex items-baseline gap-4 mb-12 reveal">
           <span className="kicker text-primary">01 / mission</span>
@@ -99,6 +98,11 @@ export const About = () => {
           </div>
         </div>
       </div>
-    </section>
+  );
+
+  return inWorld ? (
+    <div className="relative">{body}</div>
+  ) : (
+    <section id="about" className="py-24 md:py-32 px-4 md:px-8">{body}</section>
   );
 };

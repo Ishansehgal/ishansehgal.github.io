@@ -1,11 +1,10 @@
 import { useReveal } from "@/hooks/useReveal";
 import { Mail, Github, Linkedin } from "lucide-react";
 
-export const Contact = () => {
+export const Contact = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal();
 
-  return (
-    <section id="contact" className="py-24 md:py-36 px-4 md:px-8 relative overflow-hidden text-background">
+  const body = (
       <div ref={ref} className="wp wp-dark max-w-6xl mx-auto relative">
         <div className="reveal font-mono text-[11px] md:text-xs text-background/60 mb-10 space-y-1">
           <div>$ ros2 topic pub /ishan/inbox std_msgs/String \</div>
@@ -57,6 +56,11 @@ export const Contact = () => {
           <span>built with React + Vite · source on GitHub</span>
         </div>
       </div>
-    </section>
+  );
+
+  return inWorld ? (
+    <div className="relative text-background">{body}</div>
+  ) : (
+    <section id="contact" className="py-24 md:py-36 px-4 md:px-8 relative overflow-hidden text-background">{body}</section>
   );
 };
