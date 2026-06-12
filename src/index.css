@@ -183,10 +183,10 @@
 }
 
 /* ===== lidar sweep ornament ===== */
+/* note: no position here — the host element sets absolute/relative itself */
 .lidar {
   border-radius: 9999px;
   border: 1px solid hsl(var(--foreground) / 0.18);
-  position: relative;
   overflow: hidden;
 }
 

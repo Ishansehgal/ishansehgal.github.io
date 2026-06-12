@@ -94,7 +94,7 @@ export const Hero = () => {
           </div>
 
           {/* portrait as calibration target with body-frame axes */}
-          <div className="bootline hidden lg:block" style={{ "--boot-delay": "1400ms" } as React.CSSProperties}>
+          <div className="bootline hidden lg:block lg:self-start" style={{ "--boot-delay": "1400ms" } as React.CSSProperties}>
             <figure className="relative max-w-sm ml-auto">
               <div className="corner-frame">
                 <img

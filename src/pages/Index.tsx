@@ -1,5 +1,8 @@
+import { lazy, Suspense } from "react";
 import { Navigation } from "@/components/Navigation";
 import { MissionHud } from "@/components/MissionHud";
+
+const TarsCompanion = lazy(() => import("@/components/TarsCompanion"));
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Journey } from "@/components/Journey";
@@ -13,6 +16,9 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navigation />
       <MissionHud />
+      <Suspense fallback={null}>
+        <TarsCompanion />
+      </Suspense>
       <Hero />
       <About />
       <Journey />
