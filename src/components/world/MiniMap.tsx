@@ -14,39 +14,39 @@ import {
 const NARRATION: Record<string, { label: string; line: string }> = {
   home: {
     label: "boot",
-    line: "TARS online. Goal received: far end of the map. Scroll and I'll start navigating.",
+    line: "I'm TARS — Ishan built my hardware twin. Goal is the far end of the map. Scroll and I'll start driving.",
   },
   about: {
-    label: "mission",
-    line: "Waypoint 01 — mission brief: four research interests, one principle. Read the machine at every layer.",
+    label: "about",
+    line: "A bit about how he works, and the research directions he's most interested in.",
   },
   journey: {
     label: "journey",
-    line: "Waypoint 02 — career log, newest first. RigBetel Labs today; e-Yantra at IIT Bombay before that.",
+    line: "Where he's worked, newest first — RigBetel Labs now, e-Yantra at IIT Bombay before that.",
   },
   research: {
     label: "research",
-    line: "Waypoint 03 — he gave a vacuum root access, decompiled its firmware, and now it speaks ROS2.",
+    line: "The vacuum he reverse-engineered into a ROS2 base. Worth reading the steps on the right.",
   },
   projects: {
     label: "projects",
-    line: "Waypoint 04 — six systems on real hardware. One of them is my chassis.",
+    line: "Projects that ran on real robots — including the chassis I'm modeled on.",
   },
   expertise: {
     label: "stack",
-    line: "Waypoint 05 — the toolchain: Nav2, SLAM, Ghidra, simulation. Everything used to build all this.",
+    line: "The tools behind all of the above — Nav2, SLAM, Ghidra, simulation.",
   },
   contact: {
     label: "goal",
-    line: "Goal reached, zero collisions. He's aiming at graduate research — email works best.",
+    line: "Reached the goal, no collisions. He's looking for a master's place — email is best.",
   },
 };
 
 const QUIPS = [
-  "Humor setting: 75 percent.",
-  "Honesty setting: 90 percent — the orange line is the plan, the blue one is where I actually went.",
-  "Localization wobble is intentional. Mostly.",
-  "Cue light's broken. Assume that was a joke.",
+  "The orange line is the plan. The blue one is where I actually drove.",
+  "Hold the keys and I'll move. Acceleration's limited, like the real base.",
+  "That wobble in the trace is honest — it's roughly what odometry drift looks like.",
+  "Ask Ishan about the 25-millisecond heartbeat. He has opinions.",
 ];
 
 const TELEOP_LINE =

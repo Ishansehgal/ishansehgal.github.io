@@ -54,9 +54,10 @@ export const CaseStudy = () => {
           </h2>
           <div className="reveal space-y-4" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
             <p className="text-muted-foreground leading-relaxed">
-              No datasheet. No SDK. No docs. Two weekends with Ghidra and a serial sniffer turned a
-              consumer robot vacuum into a fully open, cloud-free, ROS2-native mobile base — LiDAR,
-              IMU, encoders and motor control included.
+              I had an old Mi robot vacuum lying around and needed a solid base to test some visual
+              odometry work. Building one from scratch is hard, so I decided to take full control of
+              this one instead. Two weekends later it was cloud-free and running ROS2 — LiDAR, IMU,
+              encoders and motor control, all exposed.
             </p>
             <a
               href="https://github.com/Ishansehgal/mi_vacuum_edu_hack"

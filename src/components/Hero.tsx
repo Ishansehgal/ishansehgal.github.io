@@ -48,16 +48,18 @@ export const Hero = () => {
 
             <div className="bootline space-y-6 max-w-xl" style={{ "--boot-delay": "1250ms" } as React.CSSProperties}>
               <p className="text-lg md:text-xl leading-relaxed text-muted-foreground bg-background/60 backdrop-blur-[2px]">
-                I work across the autonomy stack:{" "}
+                I build navigation software for mobile robots —{" "}
                 <span className="text-foreground font-medium">
-                  custom Nav2 planners and behaviors in C++, SLAM and localization pipelines, and
-                  firmware-level reverse engineering when the hardware is undocumented
+                  mostly ROS2 and Nav2, in C++
                 </span>
-                . Robotics developer at RigBetel Labs; e-Yantra (IIT Bombay) research intern, 2024.
+                . Right now that's my job at RigBetel Labs. When the hardware I want to use is locked
+                down, I take it apart and work out the protocol myself. Heading toward a master's in
+                robotics next.
               </p>
 
               <p className="font-mono text-[11px] text-muted-foreground">
-                ▾ TARS will walk the route with you — watch the map, bottom right.
+                ▾ TARS drives the route as you scroll — there's a live map, bottom right. You can take
+                the wheel, too.
               </p>
 
               <div className="flex flex-wrap gap-3">

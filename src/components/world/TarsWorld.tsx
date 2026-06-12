@@ -17,17 +17,18 @@ const PAPER = "#f4f1ea";
 const INK = "#211f1b";
 const ORANGE = "#f54e00";
 const BLUE = "#2c5aa0";
-const TARS_GREY = "#8d8a85";
+const TARS_GREY = "#9a968f"; // brushed-grey slabs
+const TARS_DARK = "#2c2925"; // black 3D-printed slabs (the ones carrying TARS)
 const TARS_YELLOW = "#f2c230";
 
 const TRACE_N = 600;
 
-/* ---------- TARS (grey, yellow lettering, movie proportions) ---------- */
+/* ---------- TARS — modeled on the real two-tone replica ---------- */
 
-const SLAB_W = 0.3;
-const SLAB_H = 2.6;
-const SLAB_D = 0.26;
-const GAP = 0.05;
+const SLAB_W = 0.38;
+const SLAB_H = 2.5;
+const SLAB_D = 0.34;
+const GAP = 0.04;
 const SEGMENTS = 4;
 const SEG_GAP = 0.05;
 const SEG_H = (SLAB_H - (SEGMENTS - 1) * SEG_GAP) / SEGMENTS;
@@ -53,16 +54,22 @@ const Slab = ({
   slabRef,
   letters,
   led,
+  dark,
 }: {
   x: number;
   slabRef?: React.Ref<THREE.Group>;
   letters?: boolean;
   led?: boolean;
+  dark?: boolean;
 }) => {
   const material = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({ color: TARS_GREY, metalness: 0.15, roughness: 0.55 }),
-    []
+      new THREE.MeshStandardMaterial({
+        color: dark ? TARS_DARK : TARS_GREY,
+        metalness: dark ? 0.1 : 0.18,
+        roughness: dark ? 0.7 : 0.5,
+      }),
+    [dark]
   );
   const lettersTex = useMemo(() => (letters ? makeTarsLetters() : null), [letters]);
 
@@ -382,10 +389,10 @@ const Rig = ({ reduced }: { reduced: boolean }) => {
   return (
     <>
       <group ref={tars}>
-        <Slab x={SLAB_X[0]} slabRef={outerL} letters />
+        <Slab x={SLAB_X[0]} slabRef={outerL} dark letters />
         <Slab x={SLAB_X[1]} slabRef={innerL} led />
         <Slab x={SLAB_X[2]} slabRef={innerR} />
-        <Slab x={SLAB_X[3]} slabRef={outerR} />
+        <Slab x={SLAB_X[3]} slabRef={outerR} dark />
       </group>
       <mesh ref={shadow} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, 0]}>
         <circleGeometry args={[0.85, 28]} />

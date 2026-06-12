@@ -3,10 +3,10 @@ import tarsVideo from "../assets/tars.mp4";
 import profileImg from "../assets/profile.jpg";
 
 const INTERESTS = [
-  { n: "i", title: "Visual & Visual-Inertial Odometry", note: "ego-motion from cameras, validated on a hacked vacuum base" },
-  { n: "ii", title: "Socially-Aware Navigation", note: "planners that treat humans as agents, not obstacles" },
-  { n: "iii", title: "Humanoid Locomotion & Manipulation", note: "Unitree G1, OpenArm — from gait to grasp" },
-  { n: "iv", title: "Embedded Autonomy", note: "owning the full stack down to the serial bus" },
+  { n: "i", title: "Visual & Visual-Inertial Odometry", note: "estimating motion from cameras and IMU, tested on the vacuum base" },
+  { n: "ii", title: "Socially-Aware Navigation", note: "planning around people in shared spaces, not just static obstacles" },
+  { n: "iii", title: "Humanoid Locomotion & Manipulation", note: "navigation on the Unitree G1, manipulation with OpenArm" },
+  { n: "iv", title: "Embedded Autonomy", note: "getting autonomy to run on the robot itself, down to the firmware" },
 ];
 
 export const About = () => {
@@ -23,24 +23,24 @@ export const About = () => {
         <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-start">
           <div className="space-y-10">
             <h2 className="reveal font-display font-bold text-3xl md:text-5xl leading-[1.05]">
-              Robots make sense to me at every layer —{" "}
-              <em className="font-serif italic font-normal text-primary">
-                serial bus, firmware, middleware, planner
-              </em>{" "}
-              — and I build autonomy across all of them.
+              I like working{" "}
+              <em className="font-serif italic font-normal text-primary">close to the hardware</em>,
+              where the software finally has to deal with a real machine.
             </h2>
 
             <div className="reveal space-y-5 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
               <p>
-                My work spans the full autonomy stack: decompiling ARM firmware with Ghidra to
-                liberate sensor data, writing custom Nav2 planners and behaviors in C++,
-                calibrating localization pipelines, and putting it all on real hardware — mobile
-                bases, a humanoid, and robots I've rebuilt from the inside out.
+                Most of my work is navigation for mobile robots — ROS2 and Nav2, written in C++,
+                running on real bases rather than just in simulation. That's what I do day to day at
+                RigBetel Labs: custom planners and behaviors, localization that actually holds up
+                when the robot leaves the lab.
               </p>
               <p>
-                I'm drawn to research problems where the path isn't documented: when the datasheet
-                doesn't exist, you read the bytes yourself. That instinct — measure, hypothesize,
-                verify on hardware — is what I want to bring to graduate research in robotics.
+                When the hardware I want to use is locked down, I'd rather open it up than work
+                around it. That's how the vacuum project started — I needed a solid base for some
+                visual odometry tests, so I reverse-engineered one I already had. I learn the most
+                from problems like that, where there's no datasheet and you have to figure the thing
+                out yourself. That's the kind of work I want to keep doing in a master's.
               </p>
             </div>
 
