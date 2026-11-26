@@ -1,6 +1,7 @@
 import { useReveal } from "@/hooks/useReveal";
 import tarsVideo from "../assets/tars.mp4";
 import profileImg from "../assets/profile.jpg";
+export { profileImg };
 
 const INTERESTS = [
   { n: "i", title: "Visual & Visual-Inertial Odometry", note: "estimating motion from cameras and IMU, tested on the vacuum base" },
@@ -8,6 +9,13 @@ const INTERESTS = [
   { n: "iii", title: "Humanoid Locomotion & Manipulation", note: "navigation on the Unitree G1, manipulation with OpenArm" },
   { n: "iv", title: "Embedded Autonomy", note: "getting autonomy to run on the robot itself, down to the firmware" },
 ];
+
+export const MissionLine = () => (
+  <>
+    I like working <em className="font-serif italic font-normal text-primary">close to the hardware</em>,
+    where the software finally has to deal with a real machine.
+  </>
+);
 
 export const About = ({ inWorld = false }: { inWorld?: boolean }) => {
   const ref = useReveal();
@@ -22,9 +30,7 @@ export const About = ({ inWorld = false }: { inWorld?: boolean }) => {
         <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-start">
           <div className="space-y-10">
             <h2 className="reveal font-display font-bold text-3xl md:text-5xl leading-[1.05]">
-              I like working{" "}
-              <em className="font-serif italic font-normal text-primary">close to the hardware</em>,
-              where the software finally has to deal with a real machine.
+              <MissionLine />
             </h2>
 
             <div className="reveal space-y-5 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>

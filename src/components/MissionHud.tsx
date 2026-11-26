@@ -1,21 +1,24 @@
 import { useActiveSection } from "@/hooks/useActiveSection";
 
-const WAYPOINTS = [
-  { id: "home", label: "boot" },
-  { id: "about", label: "mission" },
-  { id: "journey", label: "journey" },
-  { id: "research", label: "research" },
-  { id: "projects", label: "projects" },
-  { id: "expertise", label: "stack" },
-  { id: "contact", label: "contact" },
-];
+const LABELS: Record<string, string> = {
+  home: "boot",
+  about: "amritsar",
+  journey: "iit bombay",
+  pune: "pune",
+  projects: "workshop",
+  research: "the vacuum",
+  roscon: "roscon",
+  expertise: "stack",
+  contact: "next",
+};
 
 /**
  * Global-plan style waypoint rail on the left margin — the page's table of
  * contents drawn as a planned path.
  */
-export const MissionHud = () => {
-  const active = useActiveSection(WAYPOINTS.map((w) => w.id));
+export const MissionHud = ({ ids }: { ids: string[] }) => {
+  const WAYPOINTS = ids.map((id) => ({ id, label: LABELS[id] }));
+  const active = useActiveSection(ids);
 
   const scrollTo = (id: string) =>
     id === "home"

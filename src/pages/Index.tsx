@@ -1,8 +1,9 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { MissionHud } from "@/components/MissionHud";
 import { MiniMap } from "@/components/world/MiniMap";
 import { HoloOverlay } from "@/components/world/HoloOverlay";
+import { WAYPOINTS } from "@/components/world/path";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Journey } from "@/components/Journey";
@@ -33,12 +34,19 @@ const WorldWindow = ({ open }: { open: boolean }) => (
 
 /** Empty, full-height anchors that give the journey its scroll length and feed
  *  the nav / active-section logic — the visible content lives in HoloOverlay. */
-const STAGE = ["about", "journey", "research", "projects", "expertise", "contact"];
+const STAGE = WAYPOINTS.slice(1).map((w) => w.id);
+const PLAIN_RAIL = ["home", "about", "journey", "research", "projects", "expertise", "contact"];
 
 const Index = () => {
   const [webgl] = useState(supportsWebGL);
   const [reduced] = useState(prefersReduced);
   const immersive = webgl && !reduced;
+
+  // a link like /#roscon lands on that stop (the sections only exist after render)
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (id) document.getElementById(id)?.scrollIntoView();
+  }, []);
 
   return (
     <div className="min-h-screen text-foreground">
@@ -48,7 +56,7 @@ const Index = () => {
         </Suspense>
       )}
       <Navigation />
-      <MissionHud />
+      <MissionHud ids={immersive ? WAYPOINTS.map((w) => w.id) : PLAIN_RAIL} />
       <MiniMap webgl={webgl} />
       {immersive && <HoloOverlay />}
 
@@ -56,7 +64,12 @@ const Index = () => {
         <Hero />
 
         {immersive ? (
-          STAGE.map((id) => <section key={id} id={id} className="min-h-screen" aria-hidden="true" />)
+          STAGE.map((id) => (
+            <section key={id} id={id} className="min-h-screen" aria-hidden="true">
+              {/* the stack lives on the workshop board; keep the nav's Stack link landing there */}
+              {id === "projects" && <span id="expertise" />}
+            </section>
+          ))
         ) : (
           <>
             <WorldWindow open={webgl} />

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useReveal } from "@/hooks/useReveal";
 
-const NODES = [
+export const NODES = [
   {
     org: "RigBetel Labs",
     role: "Associate Robotics Developer",
@@ -25,9 +25,9 @@ const NODES = [
   },
   {
     org: "Guru Nanak Dev University, Amritsar",
-    role: "B.Tech — Engineering",
-    period: "Undergrad",
-    desc: "First microcontrollers, control loops and C. Picked up ROS early and kept scaling: line followers gave way to SLAM-capable mobile robots, then to the competition and research work above.",
+    role: "B.Tech — Electronics & Communication",
+    period: "2021 – 25",
+    desc: "First microcontrollers, control loops and C. Picked up ROS early and kept scaling: line followers gave way to SLAM-capable mobile robots, then to the competition and research work that followed.",
     tags: ["Foundations", "C", "Control Systems"],
   },
 ];

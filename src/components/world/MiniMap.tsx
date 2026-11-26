@@ -14,31 +14,35 @@ import {
 const NARRATION: Record<string, { label: string; line: string }> = {
   home: {
     label: "boot",
-    line: "I'm TARS — Ishan built my hardware twin. Goal is the far end of the map. Scroll and I'll start driving.",
+    line: "I'm TARS. Ishan built my hardware twin. This road is his journey so far: scroll and I'll walk it.",
   },
   about: {
-    label: "about",
-    line: "A bit about how he works, and the research directions he's most interested in.",
+    label: "amritsar",
+    line: "Amritsar, where it started: a B.Tech in electronics, and the first line followers.",
   },
   journey: {
-    label: "journey",
-    line: "Where he's worked, newest first — RigBetel Labs now, e-Yantra at IIT Bombay before that.",
+    label: "iit bombay",
+    line: "IIT Bombay and e-Yantra. A national final with a UR5 and a mobile robot, then a summer in the lab.",
   },
-  research: {
-    label: "research",
-    line: "The vacuum he reverse-engineered into a ROS2 base. Worth reading the steps on the right.",
+  pune: {
+    label: "pune",
+    line: "Pune, now: RigBetel Labs. Nav2 that ships to real customers.",
   },
   projects: {
-    label: "projects",
-    line: "Projects that ran on real robots — including the chassis I'm modeled on.",
+    label: "workshop",
+    line: "The workshop. Robots he's built and worked on, including the chassis I'm modeled on.",
   },
-  expertise: {
-    label: "stack",
-    line: "The tools behind all of the above — Nav2, SLAM, Ghidra, simulation.",
+  research: {
+    label: "the vacuum",
+    line: "The vacuum he reverse-engineered into a ROS 2 research robot. That floating room is a real map from its one camera.",
+  },
+  roscon: {
+    label: "roscon",
+    line: "Bengaluru, ROSCon India 2026. On the big screen: a 54 m house, mapped from one camera.",
   },
   contact: {
-    label: "goal",
-    line: "Reached the goal, no collisions. He's looking for a master's place — email is best.",
+    label: "next",
+    line: "Last stop for now: a master's in robotics, abroad. Email is best.",
   },
 };
 

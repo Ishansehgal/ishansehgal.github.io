@@ -1,7 +1,7 @@
 import { useReveal } from "@/hooks/useReveal";
 import { ArrowUpRight, Github } from "lucide-react";
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     id: "P-01",
     title: "Production Nav2 Autonomy Stack",
@@ -61,9 +61,9 @@ const PROJECTS = [
 const ACTIVE_RESEARCH = [
   {
     id: "R-01",
-    title: "Visual Odometry Pipelines",
-    status: "data collection",
-    note: "Benchmarking VO/VIO algorithms on the reverse-engineered vacuum base — wheel odometry and LiDAR as ground truth.",
+    title: "Odometry and a 3D map from one camera",
+    status: "ROSCon India 2026 talk",
+    note: "Depth Anything 3 and ROS 2 on the reverse-engineered vacuum. One USB webcam gives the robot's path in metres and a 3D map; a 2D lidar that sees one line fixes the depth at every pixel.",
   },
   {
     id: "R-02",

@@ -1,28 +1,33 @@
 import { useEffect, useRef } from "react";
-import { WAYPOINTS } from "./path";
-import { About } from "@/components/About";
-import { Journey } from "@/components/Journey";
-import { CaseStudy } from "@/components/CaseStudy";
-import { Projects } from "@/components/Projects";
-import { Expertise } from "@/components/Expertise";
+import { WAYPOINTS, scrollToRoute } from "./path";
 import { Contact } from "@/components/Contact";
+import {
+  AmritsarBoard,
+  BombayBoard,
+  PuneBoard,
+  WorkshopBoard,
+  VacuumBoard,
+  RosconBoard,
+} from "./StopBoards";
 
 /**
- * The stop "boards". As TARS drives the route (scroll), each section's real
- * HTML rises into a lit board in a fixed, fully-visible stage on the side of
- * the screen — the camera frames TARS beside it. Visibility is driven straight
- * off scroll position (not a jittery 3D projection), so a board can never be
- * cropped and only one is on stage at a time. Waypoint 0 is home (the Hero).
+ * The stop "boards". TARS parks at each place of the journey (scroll) and
+ * that place's board rises in a fixed, fully-visible stage on the side of the
+ * screen, while the camera frames the place beside it. Visibility is driven
+ * straight off the parked progress (not a jittery 3D projection), so a board
+ * can never be cropped and only one is on stage at a time. Waypoint 0 is home
+ * (the Hero).
  */
 type Panel = { i: number; code: string; node: React.ReactNode; dark?: boolean };
 
 const PANELS: Panel[] = [
-  { i: 1, code: "01 · MISSION", node: <About inWorld /> },
-  { i: 2, code: "02 · JOURNEY", node: <Journey inWorld /> },
-  { i: 3, code: "03 · RESEARCH", node: <CaseStudy inWorld /> },
-  { i: 4, code: "04 · SELECTED WORK", node: <Projects inWorld /> },
-  { i: 5, code: "05 · SYSTEM STACK", node: <Expertise inWorld /> },
-  { i: 6, code: "06 · GOAL", node: <Contact inWorld />, dark: true },
+  { i: 1, code: "01 · AMRITSAR", node: <AmritsarBoard /> },
+  { i: 2, code: "02 · IIT BOMBAY", node: <BombayBoard /> },
+  { i: 3, code: "03 · PUNE", node: <PuneBoard /> },
+  { i: 4, code: "04 · WORKSHOP", node: <WorkshopBoard /> },
+  { i: 5, code: "05 · THE VACUUM", node: <VacuumBoard /> },
+  { i: 6, code: "06 · ROSCON INDIA", node: <RosconBoard /> },
+  { i: 7, code: "07 · NEXT", node: <Contact inWorld />, dark: true },
 ];
 
 const smoothstep = (t: number) => {
@@ -30,9 +35,9 @@ const smoothstep = (t: number) => {
   return x * x * (3 - 2 * x);
 };
 
-// a bump peaking at the waypoint's scroll position, zero a bit before/after so
-// only one board is ever on stage (the gaps are the "driving between stops")
-const HALF = 0.082;
+// a bump peaking while TARS is parked at the waypoint, zero a bit into the drive
+// so only one board is ever on stage (the gaps are the "driving between stops")
+const HALF = 0.05;
 const bump = (frac: number, center: number) =>
   smoothstep(1 - Math.min(1, Math.abs(frac - center) / HALF));
 
@@ -42,8 +47,7 @@ export const HoloOverlay = () => {
   useEffect(() => {
     let raf = 0;
     const tick = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const frac = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      const frac = scrollToRoute();
       for (let k = 0; k < PANELS.length; k++) {
         const el = refs.current[k];
         if (!el) continue;

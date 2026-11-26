@@ -2,7 +2,7 @@ import profileImg from "../assets/profile.jpg";
 
 const BOOT_LINES = [
   { delay: 100, text: "$ ros2 launch ishan_sehgal portfolio.launch.py" },
-  { delay: 320, prefix: "[INFO] [navigation] ", text: "global plan computed — 7 waypoints" },
+  { delay: 320, prefix: "[INFO] [navigation] ", text: "global plan computed — 8 waypoints" },
   { delay: 520, prefix: "[INFO] [slam]       ", text: "map → odom transform locked" },
   { delay: 720, prefix: "[INFO] [tars]       ", text: "gait controller active" },
   { delay: 920, prefix: "[INFO] [portfolio]  ", text: "scroll to start navigation" },

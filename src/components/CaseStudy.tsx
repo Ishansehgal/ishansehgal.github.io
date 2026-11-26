@@ -1,7 +1,9 @@
 import { useReveal } from "@/hooks/useReveal";
 import { ArrowUpRight } from "lucide-react";
+import roomFly from "../assets/room_fly_through.mp4";
+import houseFly from "../assets/house_fly_through.mp4";
 
-const STEPS = [
+export const STEPS = [
   {
     n: "01",
     title: "Liberate the platform",
@@ -32,6 +34,15 @@ const STEPS = [
     body: "A C bridge runs on the robot itself: scans the serial stream for sync bytes, reassembles payloads, does the bit-shifting and filtering, and streams clean data over TCP/WiFi (or USB). On the workstation: LiDAR, IMU, wheel encoders and full motor control as native ROS2 topics.",
     mono: "serial → C bridge → TCP → ros2 topic echo /scan",
   },
+];
+
+export const TALK_TEXT =
+  "The vacuum is now my research robot: one USB webcam about 15 cm off the floor, and a 2D lidar that sees one line at 13.5 cm. Depth Anything 3 gives depth in metres from one image. Inside one frame the shape is right, but each frame has its own scale, so one wall becomes several in the map. I put every lidar point on the image, fit DA3's error as a straight line in log, and spread what is left to every pixel of the same material and surface. The fixed depth goes into RTAB-Map.";
+
+export const TALK_STATS = [
+  { v: "8.9 cm", t: "camera-only path over a 7.6 m drive. No lidar, no wheels. ORB-SLAM3 mono: 37–40 cm." },
+  { v: "15.4 → 4.8 cm", t: "room walls 1 to 1.6 m up, far above the lidar line" },
+  { v: "10.7 FPS", t: "the whole system, live, on a 6 GB laptop GPU" },
 ];
 
 export const CaseStudy = ({ inWorld = false }: { inWorld?: boolean }) => {
@@ -125,6 +136,55 @@ export const CaseStudy = ({ inWorld = false }: { inWorld?: boolean }) => {
               {t}
             </span>
           ))}
+        </div>
+
+        {/* what the platform does now: the ROSCon India 2026 talk */}
+        <div className="reveal mt-20 border-t border-border pt-10">
+          <div className="grid lg:grid-cols-[1fr_1fr] gap-10 mb-10 items-end">
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary mb-3">
+                06 / selected talk · ROSCon India 2026, main stage
+              </div>
+              <h3 className="font-display font-black text-3xl md:text-4xl uppercase leading-[0.95]">
+                Odometry and a 3D map from <span className="text-primary">one camera</span>
+              </h3>
+              <div className="font-mono text-[11px] text-muted-foreground mt-3">
+                Depth Anything 3 and ROS 2 on a small home robot
+              </div>
+            </div>
+            <p className="text-muted-foreground leading-relaxed">{TALK_TEXT}</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-px bg-border border border-border mb-10">
+            {TALK_STATS.map((s) => (
+              <div key={s.v} className="bg-background p-5">
+                <div className="font-mono text-2xl font-semibold text-primary">{s.v}</div>
+                <p className="text-[13px] text-muted-foreground leading-relaxed mt-2">{s.t}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { src: roomFly, fig: "fig. 3 — room, one live run", note: "walls at the lidar's height: 9.0 → 3.2 cm" },
+              { src: houseFly, fig: "fig. 4 — full house, 54 m, nothing tuned", note: "walls 1 to 1.6 m up: 6.9 → 3.8 cm" },
+            ].map((f) => (
+              <figure key={f.fig}>
+                <video
+                  src={f.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full border border-foreground/20 bg-secondary"
+                />
+                <figcaption className="font-mono text-[10px] text-muted-foreground mt-3 flex flex-wrap justify-between gap-2">
+                  <span>{f.fig}</span>
+                  <span className="text-primary">{f.note}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </div>
   );

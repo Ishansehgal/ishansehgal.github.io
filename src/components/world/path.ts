@@ -1,6 +1,6 @@
 /**
- * The world's navigation data: a smooth global plan through a field of
- * obstacles, shared by the 3D scene (three.js) and the minimap (SVG).
+ * The world's navigation data: one road through the places of Ishan's
+ * journey, shared by the 3D scene (three.js) and the minimap (SVG).
  * Deliberately dependency-free so the minimap doesn't pull three.js into
  * the eager bundle.
  */
@@ -9,8 +9,8 @@ export type Pose = { x: number; z: number; heading: number };
 
 // control polygon for the global plan (XZ ground plane), padded for catmull-rom
 const CONTROL: [number, number][] = [
-  [-2, 0], [0, 0], [5, 0.6], [10, -2.6], [16, 1.6], [22, -1.2],
-  [28, 3.6], [34, -2.2], [40, 1.2], [45, 0], [47, 0],
+  [-6, 0], [0, 0], [10, 2], [20, -1], [30, -6], [40, -7], [50, -3], [60, 3],
+  [70, 6], [80, 4], [90, -3], [100, -5], [110, -6], [120, -2], [128, 0], [134, 0],
 ];
 
 const SAMPLE_N = 800;
@@ -76,29 +76,60 @@ export const tracePose = (i: number, n: number) => {
 
 export const WAYPOINTS = [
   { id: "home", label: "00 · BOOT" },
-  { id: "about", label: "01 · MISSION" },
-  { id: "journey", label: "02 · JOURNEY" },
-  { id: "research", label: "03 · RESEARCH" },
-  { id: "projects", label: "04 · PROJECTS" },
-  { id: "expertise", label: "05 · STACK" },
-  { id: "contact", label: "06 · GOAL" },
+  { id: "about", label: "01 · AMRITSAR" },
+  { id: "journey", label: "02 · IIT BOMBAY" },
+  { id: "pune", label: "03 · PUNE" },
+  { id: "projects", label: "04 · WORKSHOP" },
+  { id: "research", label: "05 · THE VACUUM" },
+  { id: "roscon", label: "06 · ROSCON" },
+  { id: "contact", label: "07 · NEXT" },
 ].map((w, i, arr) => ({ ...w, t: i / (arr.length - 1) }));
 
-// obstacles the plan visibly swerves around, plus far scenery blocks
-export const OBSTACLES = [
-  { x: 10, z: 0.8, w: 2.2, d: 1.6, h: 1.6 },
-  { x: 15.5, z: -1.4, w: 1.6, d: 1.6, h: 2.4 },
-  { x: 21.5, z: 1.8, w: 2.6, d: 1.8, h: 1.2 },
-  { x: 27, z: 0.4, w: 1.4, d: 2.4, h: 2.0 },
-  { x: 33.5, z: 0.8, w: 2.0, d: 1.4, h: 1.8 },
-  { x: 38.5, z: -2.6, w: 1.6, d: 1.6, h: 1.4 },
-  { x: 5, z: 7, w: 3, d: 2, h: 2.6 },
-  { x: 19, z: -8, w: 2.4, d: 3, h: 3.2 },
-  { x: 31, z: 8, w: 3.4, d: 2.2, h: 2.2 },
-  { x: 43, z: 6, w: 2, d: 2, h: 2.8 },
-];
+const STOPS = WAYPOINTS.length - 1;
+const HOLD = 0.17; // share of each scroll segment spent parked at either end
 
-export const BOUNDS = { minX: -4, maxX: 48, minZ: -13, maxZ: 13 };
+/** Scroll fraction → route progress, with a parked plateau at every stop. */
+export const routeT = (frac: number) => {
+  const g = Math.min(Math.max(frac, 0), 1) * STOPS;
+  const i = Math.min(STOPS - 1, Math.floor(g));
+  const u = Math.min(1, Math.max(0, (g - i - HOLD) / (1 - 2 * HOLD)));
+  return (i + u * u * (3 - 2 * u)) / STOPS;
+};
+
+/**
+ * Page scroll → route progress, timed off where each stop's section actually
+ * starts (the hero is taller than one screen). Falls back to the plain scroll
+ * fraction on the plain page, which doesn't carry every stop.
+ */
+export const scrollToRoute = () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const y = window.scrollY;
+  const anchors = WAYPOINTS.map((w, k) => (k === 0 ? 0 : document.getElementById(w.id)?.offsetTop));
+  if (anchors.some((a) => a === undefined)) return routeT(max > 0 ? y / max : 0);
+  const a = anchors.map((v, k) => (k === STOPS ? Math.min(v!, max) : v!));
+  let i = 0;
+  while (i < STOPS - 1 && y >= a[i + 1]) i++;
+  const span = a[i + 1] - a[i];
+  const u = span > 0 ? Math.min(1, Math.max(0, (y - a[i]) / span)) : 0;
+  return routeT((i + u) / STOPS);
+};
+
+/** Screen-right of the road at progress t (where each place is built). */
+export const rightOf = (t: number, d: number, along = 0) => {
+  const p = getPose(t);
+  return {
+    x: p.x - Math.cos(p.heading) * d + Math.sin(p.heading) * along,
+    z: p.z + Math.sin(p.heading) * d + Math.cos(p.heading) * along,
+  };
+};
+
+// each place's footprint, for teleop bumpers and the minimap
+export const OBSTACLES = WAYPOINTS.slice(1).map((w) => {
+  const c = rightOf(w.t, 7, 7.5); // places sit 5.5 m up the road from the stop
+  return { x: c.x, z: c.z, w: 7, d: 7, h: 3 };
+});
+
+export const BOUNDS = { minX: -8, maxX: 136, minZ: -32, maxZ: 32 };
 
 /** Live state shared between the scene, the minimap and pokes. */
 export const worldState = {

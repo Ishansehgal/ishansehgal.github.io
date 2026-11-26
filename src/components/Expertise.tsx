@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/useReveal";
 
-const STACK = [
+export const STACK = [
   {
     category: "Navigation & Control",
     items: ["Nav2 (custom planners, controllers, BT nodes)", "ros2_control", "Behavior Trees", "Path planning & tracking", "Lifecycle nodes"],
